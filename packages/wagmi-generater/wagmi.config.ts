@@ -1,164 +1,158 @@
-import {defineConfig} from '@wagmi/cli'
-import {blockExplorer, react} from '@wagmi/cli/plugins'
-import {sdk} from './sdk'
-import type {Evaluate} from "@wagmi/cli/src/types";
-import type {ContractConfig} from "@wagmi/cli/src/config";
-import {resolveProxyContracts} from "./resolveProxyContracts";
+import { defineConfig } from "@wagmi/cli";
+import { blockExplorer } from "@wagmi/cli/plugins";
+import { sdk } from "./sdk";
+import type { Evaluate } from "@wagmi/cli/src/types";
+import type { ContractConfig } from "@wagmi/cli/src/config";
+import { resolveProxyContracts } from "./resolveProxyContracts";
 
-const storyTestnetId = 1513
+const storyTestnetChainId = 1513;
+const sepoliaChainId = 11155111;
 
 export default defineConfig(async () => {
-    const contracts: Evaluate<Omit<ContractConfig, 'abi'>>[] = [
-        {
-            name: "AccessController", address: {
-                // [sepolia.id]: "0xad64a4b2e18FF7D2f97aF083E7b193d7Dd141735",
-                [storyTestnetId]: "0x7e253Df9b0fC872746877Fa362b2cAf32712d770",
-            }
-        },
-        {
-            name: "DisputeModule", address: {
-                // [sepolia.id]: "0x6157B19CBc151af2b36e0a2581001d32a22b2661",
-                [storyTestnetId]: "0x6d54456Ae5DCbDC0C9E2713cC8E650fE4f445c7C",
-            }
-        },
-        {
-            name: "IPAccountImpl", address: {
-                // [sepolia.id]: "0x79792DccC6C58C303510fc1F7649e481C431aFb1",
-                [storyTestnetId]: "0x38cAfD16502B1d61c6399A18d6Fa1Ea8CEca3678",
-            }
-        },
-        {
-            name: "IPAssetRegistry", address: {
-                // [sepolia.id]: "0x292639452A975630802C17c9267169D93BD5a793",
-                [storyTestnetId]: "0x862de97662a1231FFc14038eC1BE93aB129D2169",
-            }
-        },
-        {
-            name: "IpRoyaltyVaultImpl", address: {
-                // [sepolia.id]: "",
-                [storyTestnetId]: "0x8Be22cc2D13ADF496a417D9C616dA4a253c68Af8",
-            }
-        },
-        {
-            name: "LicenseRegistry", address: {
-                // [sepolia.id]: "0xc2BC7a2d5784768BDEd98436f2522A4931e2FBb4",
-                [storyTestnetId]: "0x0c3D467537FAd845a78728CEdc3D9447338c5422",
-            }
-        },
-        {
-            name: "LicenseToken", address: {
-                // [sepolia.id]: "0x950d766A1a0afDc33c3e653C861A8765cb42DbdC",
-                [storyTestnetId]: "0xD40b7bCA204f96a346021e31c9ad54FF495226e7",
-            }
-        },
-        {
-            name: "LicensingModule", address: {
-                // [sepolia.id]: "0x950d766A1a0afDc33c3e653C861A8765cb42DbdC",
-                [storyTestnetId]: "0xEeDDE5529122b621105798860F235c28FD3aBA40",
-            }
-        },
-        {
-            name: "PILicenseTemplate", address: {
-                // [sepolia.id]: "",
-                [storyTestnetId]: "0xd0Be223ae9719bBD93447ecf5289319CCf8cA227",
-            }
-        },
-        {
-            name: "ModuleRegistry", address: {
-                // [sepolia.id]: "0x5Aac3177F496F503Ac724A0D0A697f6ba9dA2C27",
-                [storyTestnetId]: "0xf2965E3B6251905Dd1E8671077760D07b0408cf2",
-            }
-        },
-        {
-            name: "RoyaltyModule", address: {
-                // [sepolia.id]: "0xA6bEf9CC650A16939566c1da5d5088f3F028a865",
-                [storyTestnetId]: "0x551AD8CD7893003cE00500aC2aCF1E327763D9f6",
-            }
-        },
-        {
-            name: "RoyaltyPolicyLAP", address: {
-                // [sepolia.id]: "0x16eF58e959522727588921A92e9084d36E5d3855",
-                [storyTestnetId]: "0x2EcdB5bD12a037dCb9De0Ab7957f35FEeF758eA6",
-            }
-        },
-    ]
+  const contracts: Evaluate<Omit<ContractConfig, "abi">>[] = [
+    {
+      name: "AccessController",
+      address: {
+        // [sepoliaChainId]: "0xbb265920D0cb2039504493c76e8516502E75E128",
+        [storyTestnetChainId]: "0x76918764D089459cb4a1375cD7F992Cc55212Dc4",
+      },
+    },
+    {
+      name: "DisputeModule",
+      address: {
+        // [sepoliaChainId]: "0x3e75614342e42C728fF57408d0B37E7e5CBb5957",
+        [storyTestnetChainId]: "0xc639C11fACf94b169C3Cc1aeE47266F375b813e6",
+      },
+    },
+    // {
+    //   name: "IPAccountImpl",
+    //   address: {
+    //     //?
+    //     // [sepoliaChainId]: "0xbCB5115E4Ed32EC902520E673efa50556dB080Ce",
+    //     [storyTestnetChainId]: "0x66f7029fb06CEB00d7f27AEdfCf945ff74130D97",
+    //   },
+    // },
+    {
+      name: "IPAssetRegistry",
+      address: {
+        // [sepoliaChainId]: "0x945eeBB5C419bBb84F76f181a462580CfC8CB1c2",
+        [storyTestnetChainId]: "0x2d3dAdfc784432AfFD7a474543F91BD6EB5f4fb8",
+      },
+    },
+    {
+      name: "IpRoyaltyVaultImpl",
+      address: {
+        // [sepoliaChainId]: "0x99E4321793d25467333F1c82d2C9BD803c955E5D",
+        [storyTestnetChainId]: "0x31Be7ffeA5f8AFd18B4e172FD72CE25071e84E29",
+      },
+    },
+    {
+      name: "LicenseRegistry",
+      address: {
+        [sepoliaChainId]: "0x0BBDF088D26Fa76713a9F05AF3A7a86fbBB52EEB",
+        [storyTestnetChainId]: "0xC76FC2D90b84cA3323B2BBFC7536bE26d930F8D2",
+      },
+    },
+    {
+      name: "LicenseToken",
+      address: {
+        // [sepoliaChainId]: "0x9CB626A37Cb59d1676673aCC858D0790C777CDB3",
+        [storyTestnetChainId]: "0xb9BdFF92f126649caEa4f5Cf128B5b00b51aA6Ea",
+      },
+    },
+    {
+      name: "LicensingModule",
+      address: {
+        // [sepoliaChainId]: "0x2863c12344c440DdA89C7a930833825227ab12fa",
+        [storyTestnetChainId]: "0x8f6217F9D266E9350ed2aEb81B00ad740Ca16f3e",
+      },
+    },
+    {
+      name: "PILicenseTemplate",
+      address: {
+        [sepoliaChainId]: "0x406adf3940DbDF5bE2B0C2A3129B34553e876E86",
+        [storyTestnetChainId]: "0x3743462DD6e6e1234aEE23335c3e2CDa3962090f",
+      },
+    },
+    {
+      name: "ModuleRegistry",
+      address: {
+        // [sepoliaChainId]: "0xCdF6892CEc284A8312843ca03052c6365c6ecf75",
+        [storyTestnetChainId]: "0x8Cc4AA887b5B98396d8BBF5bd89edb650b1D23E3",
+      },
+    },
+    {
+      name: "RoyaltyModule",
+      address: {
+        // [sepoliaChainId]: "0xb2CD61740d224040d3D025C8E45Ce5FE370472aa",
+        [storyTestnetChainId]: "0x96289749967d2aEb0E47436746eA65A0F8A52751",
+      },
+    },
+    {
+      name: "RoyaltyPolicyLAP",
+      address: {
+        // [sepoliaChainId]: "0x9882EB3D48b2F3646C87046Fc324e4F88dF01Fde",
+        [storyTestnetChainId]: "0x5DEAcA8E9C2d604e29a3f9A1fFa6cE9d3b64c3A2",
+      },
+    },
+  ];
 
-    return {
-        out: '../core-sdk/src/abi/generated.ts',
-        contracts: [],
-        plugins: [
-            blockExplorer({
-                baseUrl: 'https://story-network.explorer.caldera.xyz/api',
-                name: 'StoryScan',
-                getAddress: await resolveProxyContracts({
-                    baseUrl: 'https://story-network.rpc.caldera.xyz/http',
-                    contracts: contracts,
-                    chainId: storyTestnetId,
-                }),
-                contracts: contracts,
-            }),
-            sdk({
-                permissionLessSDK: true,
-                whiteList: {
-                    "AccessController": [
-                        "PermissionSet",
-                        "setPermission",
-                    ],
-                    "DisputeModule": [
-                        "DisputeCancelled",
-                        "DisputeRaised",
-                        "DisputeResolved",
-                        "cancelDispute",
-                        "raiseDispute",
-                        "resolveDispute",
-                    ],
-                    "IPAccountImpl": [
-                        "execute",
-                        "executeWithSig",
-                    ],
-                    "IPAssetRegistry": [
-                        "IPRegistered",
-                        "ipId",
-                        "isRegistered",
-                        "register",
-                    ],
-                    "IpRoyaltyVaultImpl": [
-                        "claimRevenueBySnapshotBatch",
-                        "claimRevenueByTokenBatch",
-                        "claimableRevenue",
-                        "collectRoyaltyTokens",
-                        "ipId",
-                        "RoyaltyTokensCollected",
-                        "snapshot",
-                        "SnapshotCompleted"
-                    ],
-                    "PiLicenseTemplate": [
-                        "getLicenseTermsId",
-                        "registerLicenseTerms",
-                        "LicenseTermsRegistered"
-                    ],
-                    "LicensingModule": [
-                        "attachLicenseTerms",
-                        "mintLicenseTokens",
-                        "LicenseTokensMinted",
-                        "registerDerivativeWithLicenseTokens",
-                        "registerDerivative",
-                    ],
-                    "ModuleRegistry": [
-                        "isRegistered",
-                    ],
-                    "RoyaltyModule": [
-                        "payRoyaltyOnBehalf",
-                    ],
-                    "RoyaltyPolicyLAP": [
-                        "onRoyaltyPayment",
-                        "getRoyaltyData",
-                    ],
-                    "LicenseToken":[
-                        "ownerOf"
-                    ]
-                }
-            }),
-        ],
-    }
-})
+  return {
+    out: "../core-sdk/src/abi/generated.ts",
+    contracts: [],
+    plugins: [
+      blockExplorer({
+        baseUrl: "https://story-network.explorer.caldera.xyz/api",
+        name: "StoryScan",
+        getAddress: await resolveProxyContracts({
+          baseUrl: "https://story-network.rpc.caldera.xyz/http",
+          contracts: contracts,
+          chainId: storyTestnetChainId,
+        }),
+        contracts: contracts,
+      }),
+      sdk({
+        permissionLessSDK: true,
+        whiteList: {
+          AccessController: ["PermissionSet", "setPermission"],
+          DisputeModule: [
+            "DisputeCancelled",
+            "DisputeRaised",
+            "DisputeResolved",
+            "cancelDispute",
+            "raiseDispute",
+            "resolveDispute",
+          ],
+          //   IPAccountImpl: ["execute", "executeWithSig"],
+          IPAssetRegistry: ["IPRegistered", "ipId", "isRegistered", "register"],
+          IpRoyaltyVaultImpl: [
+            "claimRevenueBySnapshotBatch",
+            "claimRevenueByTokenBatch",
+            "claimableRevenue",
+            "collectRoyaltyTokens",
+            "ipId",
+            "RoyaltyTokensCollected",
+            "snapshot",
+            "SnapshotCompleted",
+          ],
+          PiLicenseTemplate: [
+            "getLicenseTermsId",
+            "registerLicenseTerms",
+            "LicenseTermsRegistered",
+          ],
+          LicensingModule: [
+            "attachLicenseTerms",
+            "mintLicenseTokens",
+            "LicenseTokensMinted",
+            "registerDerivativeWithLicenseTokens",
+            "registerDerivative",
+          ],
+          ModuleRegistry: ["isRegistered"],
+          RoyaltyModule: ["payRoyaltyOnBehalf"],
+          RoyaltyPolicyLAP: ["onRoyaltyPayment", "getRoyaltyData"],
+          LicenseToken: ["ownerOf"],
+        },
+      }),
+    ],
+  };
+});
