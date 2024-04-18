@@ -19,7 +19,7 @@ import {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbb265920D0cb2039504493c76e8516502E75E128)
  */
 export const accessControllerAbi = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
@@ -31,7 +31,11 @@ export const accessControllerAbi = [
     ],
     name: "AccessController__BothCallerAndRecipientAreNotRegisteredModule",
   },
-  { type: "error", inputs: [], name: "AccessController__CallerIsNotIPAccount" },
+  {
+    type: "error",
+    inputs: [],
+    name: "AccessController__CallerIsNotIPAccountOrOwner",
+  },
   {
     type: "error",
     inputs: [{ name: "ipAccount", internalType: "address", type: "address" }],
@@ -54,6 +58,25 @@ export const accessControllerAbi = [
   },
   { type: "error", inputs: [], name: "AccessController__PermissionIsNotValid" },
   { type: "error", inputs: [], name: "AccessController__SignerIsZeroAddress" },
+  { type: "error", inputs: [], name: "AccessController__ZeroAccessManager" },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
   {
     type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
@@ -65,16 +88,9 @@ export const accessControllerAbi = [
     name: "ERC1967InvalidImplementation",
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  { type: "error", inputs: [], name: "Governance__ProtocolPaused" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "UUPSUnauthorizedCallContext" },
@@ -88,13 +104,13 @@ export const accessControllerAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
+        name: "authority",
         internalType: "address",
         type: "address",
-        indexed: true,
+        indexed: false,
       },
     ],
-    name: "GovernanceUpdated",
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -108,6 +124,19 @@ export const accessControllerAbi = [
       },
     ],
     name: "Initialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
   },
   {
     type: "event",
@@ -147,6 +176,19 @@ export const accessControllerAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "implementation",
         internalType: "address",
         type: "address",
@@ -164,6 +206,20 @@ export const accessControllerAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "authority",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "ipAccount", internalType: "address", type: "address" },
       { name: "signer", internalType: "address", type: "address" },
@@ -172,13 +228,6 @@ export const accessControllerAbi = [
     ],
     name: "checkPermission",
     outputs: [],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "getGovernance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -195,10 +244,31 @@ export const accessControllerAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -214,6 +284,13 @@ export const accessControllerAbi = [
       { name: "moduleRegistry", internalType: "address", type: "address" },
     ],
     name: "setAddresses",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -240,25 +317,6 @@ export const accessControllerAbi = [
   {
     type: "function",
     inputs: [
-      { name: "signer", internalType: "address", type: "address" },
-      { name: "to", internalType: "address", type: "address" },
-      { name: "func", internalType: "bytes4", type: "bytes4" },
-      { name: "permission", internalType: "uint8", type: "uint8" },
-    ],
-    name: "setGlobalPermission",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
       { name: "ipAccount", internalType: "address", type: "address" },
       { name: "signer", internalType: "address", type: "address" },
       { name: "to", internalType: "address", type: "address" },
@@ -266,6 +324,13 @@ export const accessControllerAbi = [
       { name: "permission", internalType: "uint8", type: "uint8" },
     ],
     name: "setPermission",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -282,14 +347,14 @@ export const accessControllerAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbb265920D0cb2039504493c76e8516502E75E128)
  */
 export const accessControllerAddress = {
-  1513: "0x7e253Df9b0fC872746877Fa362b2cAf32712d770",
+  11155111: "0xbb265920D0cb2039504493c76e8516502E75E128",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbb265920D0cb2039504493c76e8516502E75E128)
  */
 export const accessControllerConfig = {
   address: accessControllerAddress,
@@ -301,14 +366,15 @@ export const accessControllerConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x3e75614342e42C728fF57408d0B37E7e5CBb5957)
  */
 export const disputeModuleAbi = [
   {
     type: "constructor",
     inputs: [
-      { name: "controller", internalType: "address", type: "address" },
-      { name: "assetRegistry", internalType: "address", type: "address" },
+      { name: "accessController", internalType: "address", type: "address" },
+      { name: "ipAssetRegistry", internalType: "address", type: "address" },
+      { name: "licenseRegistry", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
@@ -320,10 +386,29 @@ export const disputeModuleAbi = [
   { type: "error", inputs: [], name: "AccessControlled__ZeroAddress" },
   {
     type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
+  {
+    type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
     name: "AddressEmptyCode",
   },
   { type: "error", inputs: [], name: "DisputeModule__NotAbleToResolve" },
+  { type: "error", inputs: [], name: "DisputeModule__NotDerivative" },
   { type: "error", inputs: [], name: "DisputeModule__NotDisputeInitiator" },
   { type: "error", inputs: [], name: "DisputeModule__NotInDisputeState" },
   { type: "error", inputs: [], name: "DisputeModule__NotRegisteredIpId" },
@@ -342,9 +427,20 @@ export const disputeModuleAbi = [
     inputs: [],
     name: "DisputeModule__NotWhitelistedDisputeTag",
   },
+  {
+    type: "error",
+    inputs: [],
+    name: "DisputeModule__ParentDisputeNotResolved",
+  },
+  { type: "error", inputs: [], name: "DisputeModule__ParentIpIdMismatch" },
+  { type: "error", inputs: [], name: "DisputeModule__ParentNotTagged" },
+  { type: "error", inputs: [], name: "DisputeModule__ZeroAccessController" },
+  { type: "error", inputs: [], name: "DisputeModule__ZeroAccessManager" },
   { type: "error", inputs: [], name: "DisputeModule__ZeroArbitrationPolicy" },
   { type: "error", inputs: [], name: "DisputeModule__ZeroArbitrationRelayer" },
   { type: "error", inputs: [], name: "DisputeModule__ZeroDisputeTag" },
+  { type: "error", inputs: [], name: "DisputeModule__ZeroIPAssetRegistry" },
+  { type: "error", inputs: [], name: "DisputeModule__ZeroLicenseRegistry" },
   {
     type: "error",
     inputs: [],
@@ -356,15 +452,9 @@ export const disputeModuleAbi = [
     name: "ERC1967InvalidImplementation",
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
@@ -437,6 +527,19 @@ export const disputeModuleAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "authority",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AuthorityUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "arbitrationPolicy",
         internalType: "address",
         type: "address",
@@ -444,6 +547,32 @@ export const disputeModuleAbi = [
       },
     ],
     name: "DefaultArbitrationPolicyUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "parentIpId",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "derivativeIpId",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "parentDisputeId",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      { name: "tag", internalType: "bytes32", type: "bytes32", indexed: false },
+    ],
+    name: "DerivativeTaggedOnParentInfringement",
   },
   {
     type: "event",
@@ -536,19 +665,6 @@ export const disputeModuleAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "GovernanceUpdated",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
         name: "version",
         internalType: "uint64",
         type: "uint64",
@@ -561,10 +677,36 @@ export const disputeModuleAbi = [
     type: "event",
     anonymous: false,
     inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
       { name: "tag", internalType: "bytes32", type: "bytes32", indexed: false },
       { name: "allowed", internalType: "bool", type: "bool", indexed: false },
     ],
     name: "TagWhitelistUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
   },
   {
     type: "event",
@@ -616,15 +758,36 @@ export const disputeModuleAbi = [
   {
     type: "function",
     inputs: [],
+    name: "LICENSE_REGISTRY",
+    outputs: [{ name: "", internalType: "contract ILicenseRegistry", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "UPGRADE_INTERFACE_VERSION",
     outputs: [{ name: "", internalType: "string", type: "string" }],
     stateMutability: "view",
   },
   {
     type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [{ name: "ipId", internalType: "address", type: "address" }],
     name: "arbitrationPolicies",
     outputs: [{ name: "policy", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "authority",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -666,22 +829,23 @@ export const disputeModuleAbi = [
       },
       { name: "targetTag", internalType: "bytes32", type: "bytes32" },
       { name: "currentTag", internalType: "bytes32", type: "bytes32" },
+      { name: "parentDisputeId", internalType: "uint256", type: "uint256" },
     ],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [],
-    name: "getGovernance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "_governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -716,9 +880,30 @@ export const disputeModuleAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "data", internalType: "bytes[]", type: "bytes[]" }],
+    name: "multicall",
+    outputs: [{ name: "results", internalType: "bytes[]", type: "bytes[]" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
     name: "name",
     outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
   {
@@ -742,7 +927,10 @@ export const disputeModuleAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "disputeId", internalType: "uint256", type: "uint256" }],
+    inputs: [
+      { name: "disputeId", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
     name: "resolveDispute",
     outputs: [],
     stateMutability: "nonpayable",
@@ -754,6 +942,13 @@ export const disputeModuleAbi = [
       { name: "arbitrationPolicy", internalType: "address", type: "address" },
     ],
     name: "setArbitrationPolicy",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -777,17 +972,28 @@ export const disputeModuleAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
+    name: "supportsInterface",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "parentIpId", internalType: "address", type: "address" },
+      { name: "derivativeIpId", internalType: "address", type: "address" },
+      { name: "parentDisputeId", internalType: "uint256", type: "uint256" },
+    ],
+    name: "tagDerivativeIfParentInfringed",
     outputs: [],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
-    inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
-    name: "supportsInterface",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-    stateMutability: "view",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -833,14 +1039,14 @@ export const disputeModuleAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x3e75614342e42C728fF57408d0B37E7e5CBb5957)
  */
 export const disputeModuleAddress = {
-  1513: "0x6d54456Ae5DCbDC0C9E2713cC8E650fE4f445c7C",
+  11155111: "0x3e75614342e42C728fF57408d0B37E7e5CBb5957",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x3e75614342e42C728fF57408d0B37E7e5CBb5957)
  */
 export const disputeModuleConfig = {
   address: disputeModuleAddress,
@@ -852,317 +1058,303 @@ export const disputeModuleConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbCB5115E4Ed32EC902520E673efa50556dB080Ce)
  */
 export const ipAccountImplAbi = [
   {
     type: "constructor",
-    inputs: [{ name: "accessController_", internalType: "address", type: "address" }],
+    inputs: [
+      { name: "_chainId", internalType: "uint256", type: "uint256" },
+      { name: "_owners", internalType: "address[]", type: "address[]" },
+      { name: "_signaturesRequired", internalType: "uint256", type: "uint256" },
+    ],
     stateMutability: "nonpayable",
   },
-  { type: "error", inputs: [], name: "IPAccount__ExpiredSignature" },
-  { type: "error", inputs: [], name: "IPAccount__InvalidAccessController" },
-  { type: "error", inputs: [], name: "IPAccount__InvalidCalldata" },
-  { type: "error", inputs: [], name: "IPAccount__InvalidSignature" },
-  { type: "error", inputs: [], name: "IPAccount__InvalidSigner" },
   {
     type: "event",
     anonymous: false,
-    inputs: [
-      { name: "to", internalType: "address", type: "address", indexed: true },
-      {
-        name: "value",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      { name: "data", internalType: "bytes", type: "bytes", indexed: false },
-      {
-        name: "nonce",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-    ],
-    name: "Executed",
+    inputs: [{ name: "to", internalType: "address", type: "address", indexed: true }],
+    name: "CloseStream",
   },
   {
     type: "event",
     anonymous: false,
     inputs: [
-      { name: "to", internalType: "address", type: "address", indexed: true },
       {
-        name: "value",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      { name: "data", internalType: "bytes", type: "bytes", indexed: false },
-      {
-        name: "nonce",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      {
-        name: "deadline",
-        internalType: "uint256",
-        type: "uint256",
-        indexed: false,
-      },
-      {
-        name: "signer",
+        name: "sender",
         internalType: "address",
         type: "address",
         indexed: true,
       },
       {
-        name: "signature",
-        internalType: "bytes",
-        type: "bytes",
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "balance",
+        internalType: "uint256",
+        type: "uint256",
         indexed: false,
       },
     ],
-    name: "ExecutedWithSig",
+    name: "Deposit",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "owner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      {
+        name: "to",
+        internalType: "address payable",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "value",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      { name: "data", internalType: "bytes", type: "bytes", indexed: false },
+      {
+        name: "nonce",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "hash",
+        internalType: "bytes32",
+        type: "bytes32",
+        indexed: false,
+      },
+      { name: "result", internalType: "bytes", type: "bytes", indexed: false },
+    ],
+    name: "ExecuteTransaction",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "to", internalType: "address", type: "address", indexed: true },
+      {
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "frequency",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+    ],
+    name: "OpenStream",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "owner",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+      { name: "added", internalType: "bool", type: "bool", indexed: false },
+    ],
+    name: "Owner",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      { name: "to", internalType: "address", type: "address", indexed: true },
+      {
+        name: "amount",
+        internalType: "uint256",
+        type: "uint256",
+        indexed: false,
+      },
+      {
+        name: "reason",
+        internalType: "string",
+        type: "string",
+        indexed: false,
+      },
+    ],
+    name: "Withdraw",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "newSigner", internalType: "address", type: "address" },
+      {
+        name: "newSignaturesRequired",
+        internalType: "uint256",
+        type: "uint256",
+      },
+    ],
+    name: "addSigner",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
     inputs: [],
-    name: "accessController",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "chainId",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "addressData",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
+    inputs: [{ name: "to", internalType: "address payable", type: "address" }],
+    name: "closeStream",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
     inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
+      { name: "to", internalType: "address payable", type: "address" },
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+      { name: "signatures", internalType: "bytes[]", type: "bytes[]" },
     ],
-    name: "boolData",
+    name: "executeTransaction",
+    outputs: [{ name: "", internalType: "bytes", type: "bytes" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "_nonce", internalType: "uint256", type: "uint256" },
+      { name: "to", internalType: "address", type: "address" },
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "getTransactionHash",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "isOwner",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "bytes32Data",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "bytesData",
-    outputs: [{ name: "", internalType: "bytes", type: "bytes" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "to", internalType: "address", type: "address" },
-      { name: "value", internalType: "uint256", type: "uint256" },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "execute",
-    outputs: [{ name: "result", internalType: "bytes", type: "bytes" }],
-    stateMutability: "payable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "to", internalType: "address", type: "address" },
-      { name: "value", internalType: "uint256", type: "uint256" },
-      { name: "data", internalType: "bytes", type: "bytes" },
-      { name: "signer", internalType: "address", type: "address" },
-      { name: "deadline", internalType: "uint256", type: "uint256" },
-      { name: "signature", internalType: "bytes", type: "bytes" },
-    ],
-    name: "executeWithSig",
-    outputs: [{ name: "result", internalType: "bytes", type: "bytes" }],
-    stateMutability: "payable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "key", internalType: "bytes32", type: "bytes32" }],
-    name: "getBytes",
-    outputs: [{ name: "", internalType: "bytes", type: "bytes" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "namespace", internalType: "bytes32", type: "bytes32" },
-      { name: "key", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "getBytes",
-    outputs: [{ name: "", internalType: "bytes", type: "bytes" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "namespace", internalType: "bytes32", type: "bytes32" },
-      { name: "key", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "getBytes32",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "key", internalType: "bytes32", type: "bytes32" }],
-    name: "getBytes32",
-    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "signer", internalType: "address", type: "address" },
-      { name: "data", internalType: "bytes", type: "bytes" },
-    ],
-    name: "isValidSigner",
-    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256[]", type: "uint256[]" },
-      { name: "", internalType: "uint256[]", type: "uint256[]" },
-      { name: "", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onERC1155BatchReceived",
-    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onERC1155Received",
-    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "bytes", type: "bytes" },
-    ],
-    name: "onERC721Received",
-    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
-    stateMutability: "pure",
-  },
-  {
-    type: "function",
     inputs: [],
-    name: "owner",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "key", internalType: "bytes32", type: "bytes32" },
-      { name: "value", internalType: "bytes", type: "bytes" },
-    ],
-    name: "setBytes",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [
-      { name: "key", internalType: "bytes32", type: "bytes32" },
-      { name: "value", internalType: "bytes32", type: "bytes32" },
-    ],
-    name: "setBytes32",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "state",
+    name: "nonce",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
     type: "function",
     inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
+      { name: "to", internalType: "address", type: "address" },
+      { name: "amount", internalType: "uint256", type: "uint256" },
+      { name: "frequency", internalType: "uint256", type: "uint256" },
     ],
-    name: "stringData",
-    outputs: [{ name: "", internalType: "string", type: "string" }],
-    stateMutability: "view",
+    name: "openStream",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
-    inputs: [{ name: "interfaceId", internalType: "bytes4", type: "bytes4" }],
-    name: "supportsInterface",
-    outputs: [{ name: "", internalType: "bool", type: "bool" }],
-    stateMutability: "view",
+    inputs: [
+      { name: "_hash", internalType: "bytes32", type: "bytes32" },
+      { name: "_signature", internalType: "bytes", type: "bytes" },
+    ],
+    name: "recover",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "pure",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "oldSigner", internalType: "address", type: "address" },
+      {
+        name: "newSignaturesRequired",
+        internalType: "uint256",
+        type: "uint256",
+      },
+    ],
+    name: "removeSigner",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
     inputs: [],
-    name: "token",
+    name: "signaturesRequired",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "to", internalType: "address", type: "address" }],
+    name: "streamBalance",
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "amount", internalType: "uint256", type: "uint256" },
+      { name: "reason", internalType: "string", type: "string" },
+    ],
+    name: "streamWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "", internalType: "address", type: "address" }],
+    name: "streams",
     outputs: [
-      { name: "", internalType: "uint256", type: "uint256" },
-      { name: "", internalType: "address", type: "address" },
-      { name: "", internalType: "uint256", type: "uint256" },
+      { name: "amount", internalType: "uint256", type: "uint256" },
+      { name: "frequency", internalType: "uint256", type: "uint256" },
+      { name: "last", internalType: "uint256", type: "uint256" },
     ],
     stateMutability: "view",
   },
   {
     type: "function",
     inputs: [
-      { name: "", internalType: "bytes32", type: "bytes32" },
-      { name: "", internalType: "bytes32", type: "bytes32" },
+      {
+        name: "newSignaturesRequired",
+        internalType: "uint256",
+        type: "uint256",
+      },
     ],
-    name: "uint256Data",
-    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
+    name: "updateSignaturesRequired",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   { type: "receive", stateMutability: "payable" },
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbCB5115E4Ed32EC902520E673efa50556dB080Ce)
  */
 export const ipAccountImplAddress = {
-  1513: "0x38cAfD16502B1d61c6399A18d6Fa1Ea8CEca3678",
+  11155111: "0xbCB5115E4Ed32EC902520E673efa50556dB080Ce",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xbCB5115E4Ed32EC902520E673efa50556dB080Ce)
  */
 export const ipAccountImplConfig = {
   address: ipAccountImplAddress,
@@ -1174,7 +1366,7 @@ export const ipAccountImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x945eeBB5C419bBb84F76f181a462580CfC8CB1c2)
  */
 export const ipAssetRegistryAbi = [
   {
@@ -1182,19 +1374,42 @@ export const ipAssetRegistryAbi = [
     inputs: [
       { name: "erc6551Registry", internalType: "address", type: "address" },
       { name: "ipAccountImpl", internalType: "address", type: "address" },
-      { name: "governance", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
   {
     type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
   },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
-  { type: "error", inputs: [], name: "IPAccountRegistry_InvalidIpAccountImpl" },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "target", internalType: "address", type: "address" }],
+    name: "AddressEmptyCode",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "implementation", internalType: "address", type: "address" }],
+    name: "ERC1967InvalidImplementation",
+  },
+  { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
+  { type: "error", inputs: [], name: "FailedInnerCall" },
+  { type: "error", inputs: [], name: "IPAccountRegistry_ZeroIpAccountImpl" },
   { type: "error", inputs: [], name: "IPAssetRegistry__AlreadyRegistered" },
   {
     type: "error",
@@ -1214,18 +1429,35 @@ export const ipAssetRegistryAbi = [
     inputs: [{ name: "contractAddress", internalType: "address", type: "address" }],
     name: "IPAssetRegistry__UnsupportedIERC721Metadata",
   },
+  { type: "error", inputs: [], name: "IPAssetRegistry__ZeroAccessManager" },
+  { type: "error", inputs: [], name: "InvalidInitialization" },
+  { type: "error", inputs: [], name: "NotInitializing" },
+  {
+    type: "error",
+    inputs: [
+      { name: "value", internalType: "uint256", type: "uint256" },
+      { name: "length", internalType: "uint256", type: "uint256" },
+    ],
+    name: "StringsInsufficientHexLength",
+  },
+  { type: "error", inputs: [], name: "UUPSUnauthorizedCallContext" },
+  {
+    type: "error",
+    inputs: [{ name: "slot", internalType: "bytes32", type: "bytes32" }],
+    name: "UUPSUnsupportedProxiableUUID",
+  },
   {
     type: "event",
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
+        name: "authority",
         internalType: "address",
         type: "address",
-        indexed: true,
+        indexed: false,
       },
     ],
-    name: "GovernanceUpdated",
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -1304,6 +1536,58 @@ export const ipAssetRegistryAbi = [
     name: "IPRegistered",
   },
   {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "version",
+        internalType: "uint64",
+        type: "uint64",
+        indexed: false,
+      },
+    ],
+    name: "Initialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "implementation",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "Upgraded",
+  },
+  {
     type: "function",
     inputs: [],
     name: "ERC6551_PUBLIC_REGISTRY",
@@ -1327,7 +1611,21 @@ export const ipAssetRegistryAbi = [
   {
     type: "function",
     inputs: [],
-    name: "getGovernance",
+    name: "UPGRADE_INTERFACE_VERSION",
+    outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "authority",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
@@ -1340,10 +1638,10 @@ export const ipAssetRegistryAbi = [
   },
   {
     type: "function",
-    inputs: [],
-    name: "governance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "initialize",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -1369,6 +1667,13 @@ export const ipAssetRegistryAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [{ name: "id", internalType: "address", type: "address" }],
     name: "isRegistered",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
@@ -1376,7 +1681,29 @@ export const ipAssetRegistryAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "proxiableUUID",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [
+      { name: "chainid", internalType: "uint256", type: "uint256" },
       { name: "tokenContract", internalType: "address", type: "address" },
       { name: "tokenId", internalType: "uint256", type: "uint256" },
     ],
@@ -1397,8 +1724,8 @@ export const ipAssetRegistryAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -1409,17 +1736,34 @@ export const ipAssetRegistryAbi = [
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "newImplementation", internalType: "address", type: "address" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "upgradeToAndCall",
+    outputs: [],
+    stateMutability: "payable",
+  },
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x945eeBB5C419bBb84F76f181a462580CfC8CB1c2)
  */
 export const ipAssetRegistryAddress = {
-  1513: "0x862de97662a1231FFc14038eC1BE93aB129D2169",
+  11155111: "0x945eeBB5C419bBb84F76f181a462580CfC8CB1c2",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x945eeBB5C419bBb84F76f181a462580CfC8CB1c2)
  */
 export const ipAssetRegistryConfig = {
   address: ipAssetRegistryAddress,
@@ -1431,7 +1775,7 @@ export const ipAssetRegistryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x99E4321793d25467333F1c82d2C9BD803c955E5D)
  */
 export const ipRoyaltyVaultImplAbi = [
   {
@@ -1444,6 +1788,7 @@ export const ipRoyaltyVaultImplAbi = [
   },
   { type: "error", inputs: [], name: "IpRoyaltyVault__AlreadyClaimed" },
   { type: "error", inputs: [], name: "IpRoyaltyVault__ClaimerNotAnAncestor" },
+  { type: "error", inputs: [], name: "IpRoyaltyVault__EnforcedPause" },
   { type: "error", inputs: [], name: "IpRoyaltyVault__IpTagged" },
   { type: "error", inputs: [], name: "IpRoyaltyVault__NotRoyaltyPolicyLAP" },
   {
@@ -1452,7 +1797,6 @@ export const ipRoyaltyVaultImplAbi = [
     name: "IpRoyaltyVault__SnapshotIntervalTooShort",
   },
   { type: "error", inputs: [], name: "IpRoyaltyVault__ZeroDisputeModule" },
-  { type: "error", inputs: [], name: "IpRoyaltyVault__ZeroIpId" },
   { type: "error", inputs: [], name: "IpRoyaltyVault__ZeroRoyaltyPolicyLAP" },
   {
     type: "event",
@@ -1593,7 +1937,7 @@ export const ipRoyaltyVaultImplAbi = [
     type: "function",
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "addIpRoyaltyVaultTokens",
-    outputs: [],
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "nonpayable",
   },
   {
@@ -1610,7 +1954,7 @@ export const ipRoyaltyVaultImplAbi = [
     type: "function",
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "ancestorsVaultAmount",
-    outputs: [{ name: "amount", internalType: "uint256", type: "uint256" }],
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -1654,7 +1998,7 @@ export const ipRoyaltyVaultImplAbi = [
     type: "function",
     inputs: [
       { name: "snapshotId", internalType: "uint256", type: "uint256" },
-      { name: "tokens", internalType: "address[]", type: "address[]" },
+      { name: "tokenList", internalType: "address[]", type: "address[]" },
     ],
     name: "claimRevenueByTokenBatch",
     outputs: [],
@@ -1664,7 +2008,7 @@ export const ipRoyaltyVaultImplAbi = [
     type: "function",
     inputs: [{ name: "token", internalType: "address", type: "address" }],
     name: "claimVaultAmount",
-    outputs: [{ name: "amount", internalType: "uint256", type: "uint256" }],
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -1674,7 +2018,7 @@ export const ipRoyaltyVaultImplAbi = [
       { name: "token", internalType: "address", type: "address" },
     ],
     name: "claimableAtSnapshot",
-    outputs: [{ name: "amount", internalType: "uint256", type: "uint256" }],
+    outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -1711,13 +2055,6 @@ export const ipRoyaltyVaultImplAbi = [
     name: "decreaseAllowance",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "getVaultTokens",
-    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
-    stateMutability: "view",
   },
   {
     type: "function",
@@ -1763,7 +2100,7 @@ export const ipRoyaltyVaultImplAbi = [
   {
     type: "function",
     inputs: [{ name: "ancestorIpId", internalType: "address", type: "address" }],
-    name: "isClaimedByAncestor",
+    name: "isCollectedByAncestor",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
@@ -1793,6 +2130,13 @@ export const ipRoyaltyVaultImplAbi = [
     inputs: [],
     name: "symbol",
     outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "tokens",
+    outputs: [{ name: "", internalType: "address[]", type: "address[]" }],
     stateMutability: "view",
   },
   {
@@ -1834,7 +2178,7 @@ export const ipRoyaltyVaultImplAbi = [
     type: "function",
     inputs: [{ name: "snapshotId", internalType: "uint256", type: "uint256" }],
     name: "unclaimedAtSnapshot",
-    outputs: [{ name: "tokenAmount", internalType: "uint32", type: "uint32" }],
+    outputs: [{ name: "", internalType: "uint32", type: "uint32" }],
     stateMutability: "view",
   },
   {
@@ -1847,14 +2191,14 @@ export const ipRoyaltyVaultImplAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x99E4321793d25467333F1c82d2C9BD803c955E5D)
  */
 export const ipRoyaltyVaultImplAddress = {
-  1513: "0x8Be22cc2D13ADF496a417D9C616dA4a253c68Af8",
+  11155111: "0x99E4321793d25467333F1c82d2C9BD803c955E5D",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x99E4321793d25467333F1c82d2C9BD803c955E5D)
  */
 export const ipRoyaltyVaultImplConfig = {
   address: ipRoyaltyVaultImplAddress,
@@ -1866,10 +2210,28 @@ export const ipRoyaltyVaultImplConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x0BBDF088D26Fa76713a9F05AF3A7a86fbBB52EEB)
  */
 export const licenseRegistryAbi = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
   {
     type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
@@ -1882,14 +2244,6 @@ export const licenseRegistryAbi = [
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   {
     type: "error",
@@ -1915,6 +2269,15 @@ export const licenseRegistryAbi = [
     type: "error",
     inputs: [
       { name: "ipId", internalType: "address", type: "address" },
+      { name: "licenseTemplate", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
+    ],
+    name: "LicenseRegistry__DuplicateLicense",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "ipId", internalType: "address", type: "address" },
       { name: "index", internalType: "uint256", type: "uint256" },
       { name: "length", internalType: "uint256", type: "uint256" },
     ],
@@ -1928,10 +2291,28 @@ export const licenseRegistryAbi = [
   {
     type: "error",
     inputs: [
+      { name: "ipId", internalType: "address", type: "address" },
+      { name: "licenseTemplate", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
+    ],
+    name: "LicenseRegistry__LicenseTermsAlreadyAttached",
+  },
+  {
+    type: "error",
+    inputs: [
       { name: "licenseTemplate", internalType: "address", type: "address" },
       { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
     ],
     name: "LicenseRegistry__LicenseTermsNotExists",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "ipId", internalType: "address", type: "address" },
+      { name: "licenseTemplate", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
+    ],
+    name: "LicenseRegistry__LicensorIpHasNoLicenseTerms",
   },
   { type: "error", inputs: [], name: "LicenseRegistry__NoParentIp" },
   {
@@ -1963,13 +2344,23 @@ export const licenseRegistryAbi = [
       { name: "ipId", internalType: "address", type: "address" },
       { name: "licenseTemplate", internalType: "address", type: "address" },
     ],
-    name: "LicenseRegistry__ParentIpUnmachedLicenseTemplate",
+    name: "LicenseRegistry__ParentIpUnmatchedLicenseTemplate",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "ipId", internalType: "address", type: "address" },
+      { name: "licenseTemplate", internalType: "address", type: "address" },
+      { name: "newLicenseTemplate", internalType: "address", type: "address" },
+    ],
+    name: "LicenseRegistry__UnmatchedLicenseTemplate",
   },
   {
     type: "error",
     inputs: [{ name: "licenseTemplate", internalType: "address", type: "address" }],
     name: "LicenseRegistry__UnregisteredLicenseTemplate",
   },
+  { type: "error", inputs: [], name: "LicenseRegistry__ZeroAccessManager" },
   { type: "error", inputs: [], name: "LicenseRegistry__ZeroDisputeModule" },
   { type: "error", inputs: [], name: "LicenseRegistry__ZeroLicensingModule" },
   {
@@ -1996,6 +2387,19 @@ export const licenseRegistryAbi = [
     type: "event",
     anonymous: false,
     inputs: [
+      {
+        name: "authority",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AuthorityUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
       { name: "ipId", internalType: "address", type: "address", indexed: true },
       {
         name: "expireTime",
@@ -2005,19 +2409,6 @@ export const licenseRegistryAbi = [
       },
     ],
     name: "ExpirationTimeSet",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newGovernance",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "GovernanceUpdated",
   },
   {
     type: "event",
@@ -2135,6 +2526,13 @@ export const licenseRegistryAbi = [
   {
     type: "function",
     inputs: [],
+    name: "authority",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "disputeModule",
     outputs: [{ name: "", internalType: "contract IDisputeModule", type: "address" }],
     stateMutability: "view",
@@ -2201,13 +2599,6 @@ export const licenseRegistryAbi = [
     inputs: [{ name: "ipId", internalType: "address", type: "address" }],
     name: "getExpireTime",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "getGovernance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -2279,15 +2670,39 @@ export const licenseRegistryAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [{ name: "childIpId", internalType: "address", type: "address" }],
     name: "isDerivativeIp",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "ipId", internalType: "address", type: "address" }],
+    name: "isExpiredNow",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "parentIpId", internalType: "address", type: "address" },
+      { name: "childIpId", internalType: "address", type: "address" },
+    ],
+    name: "isParentIp",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
@@ -2333,6 +2748,13 @@ export const licenseRegistryAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "newLicenseTemplate", internalType: "address", type: "address" },
       { name: "newLicenseTermsId", internalType: "uint256", type: "uint256" },
@@ -2355,13 +2777,6 @@ export const licenseRegistryAbi = [
       { name: "expireTime", internalType: "uint256", type: "uint256" },
     ],
     name: "setExpireTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -2478,14 +2893,14 @@ export const licenseRegistryAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x0BBDF088D26Fa76713a9F05AF3A7a86fbBB52EEB)
  */
 export const licenseRegistryAddress = {
-  1513: "0x0c3D467537FAd845a78728CEdc3D9447338c5422",
+  11155111: "0x0BBDF088D26Fa76713a9F05AF3A7a86fbBB52EEB",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x0BBDF088D26Fa76713a9F05AF3A7a86fbBB52EEB)
  */
 export const licenseRegistryConfig = {
   address: licenseRegistryAddress,
@@ -2497,10 +2912,28 @@ export const licenseRegistryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9CB626A37Cb59d1676673aCC858D0790C777CDB3)
  */
 export const licenseTokenAbi = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
   {
     type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
@@ -2569,14 +3002,6 @@ export const licenseTokenAbi = [
     name: "ERC721OutOfBoundsIndex",
   },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   {
     type: "error",
@@ -2615,6 +3040,7 @@ export const licenseTokenAbi = [
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
     name: "LicenseToken__RevokedLicense",
   },
+  { type: "error", inputs: [], name: "LicenseToken__ZeroAccessManager" },
   { type: "error", inputs: [], name: "LicenseToken__ZeroDisputeModule" },
   { type: "error", inputs: [], name: "LicenseToken__ZeroLicensingModule" },
   { type: "error", inputs: [], name: "NotInitializing" },
@@ -2682,6 +3108,19 @@ export const licenseTokenAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "authority",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AuthorityUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "_fromTokenId",
         internalType: "uint256",
         type: "uint256",
@@ -2695,19 +3134,6 @@ export const licenseTokenAbi = [
       },
     ],
     name: "BatchMetadataUpdate",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newGovernance",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "GovernanceUpdated",
   },
   {
     type: "event",
@@ -2794,6 +3220,13 @@ export const licenseTokenAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "authority",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [{ name: "owner", internalType: "address", type: "address" }],
     name: "balanceOf",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
@@ -2811,6 +3244,13 @@ export const licenseTokenAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "disputeModule",
+    outputs: [{ name: "", internalType: "contract IDisputeModule", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
     name: "getApproved",
     outputs: [{ name: "", internalType: "address", type: "address" }],
@@ -2821,13 +3261,6 @@ export const licenseTokenAbi = [
     inputs: [{ name: "tokenId", internalType: "uint256", type: "uint256" }],
     name: "getExpirationTime",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
-    name: "getGovernance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -2875,7 +3308,7 @@ export const licenseTokenAbi = [
   {
     type: "function",
     inputs: [
-      { name: "governance", internalType: "address", type: "address" },
+      { name: "accessManager", internalType: "address", type: "address" },
       { name: "imageUrl", internalType: "string", type: "string" },
     ],
     name: "initialize",
@@ -2890,6 +3323,13 @@ export const licenseTokenAbi = [
     ],
     name: "isApprovedForAll",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
     stateMutability: "view",
   },
   {
@@ -2976,15 +3416,15 @@ export const licenseTokenAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "newDisputeModule", internalType: "address", type: "address" }],
-    name: "setDisputeModule",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newDisputeModule", internalType: "address", type: "address" }],
+    name: "setDisputeModule",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -3093,14 +3533,14 @@ export const licenseTokenAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9CB626A37Cb59d1676673aCC858D0790C777CDB3)
  */
 export const licenseTokenAddress = {
-  1513: "0xD40b7bCA204f96a346021e31c9ad54FF495226e7",
+  11155111: "0x9CB626A37Cb59d1676673aCC858D0790C777CDB3",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9CB626A37Cb59d1676673aCC858D0790C777CDB3)
  */
 export const licenseTokenConfig = {
   address: licenseTokenAddress,
@@ -3112,7 +3552,7 @@ export const licenseTokenConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x2863c12344c440DdA89C7a930833825227ab12fa)
  */
 export const licensingModuleAbi = [
   {
@@ -3135,6 +3575,24 @@ export const licensingModuleAbi = [
   { type: "error", inputs: [], name: "AccessControlled__ZeroAddress" },
   {
     type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
+  {
+    type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
     name: "AddressEmptyCode",
   },
@@ -3144,15 +3602,9 @@ export const licensingModuleAbi = [
     name: "ERC1967InvalidImplementation",
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "LicensingModule__DisputedIpId" },
   {
@@ -3166,6 +3618,15 @@ export const licensingModuleAbi = [
       },
     ],
     name: "LicensingModule__IncompatibleRoyaltyPolicy",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "licenseTemplate", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
+      { name: "licensorIpId", internalType: "address", type: "address" },
+    ],
+    name: "LicensingModule__LicenseDenyMintLicenseToken",
   },
   {
     type: "error",
@@ -3197,6 +3658,7 @@ export const licensingModuleAbi = [
     name: "LicensingModule__ReceiverCheckFailed",
   },
   { type: "error", inputs: [], name: "LicensingModule__ReceiverZeroAddress" },
+  { type: "error", inputs: [], name: "LicensingModule__ZeroAccessManager" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
   { type: "error", inputs: [], name: "UUPSUnauthorizedCallContext" },
@@ -3204,6 +3666,19 @@ export const licensingModuleAbi = [
     type: "error",
     inputs: [{ name: "slot", internalType: "bytes32", type: "bytes32" }],
     name: "UUPSUnsupportedProxiableUUID",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "authority",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -3247,19 +3722,6 @@ export const licensingModuleAbi = [
       },
     ],
     name: "DerivativeRegistered",
-  },
-  {
-    type: "event",
-    anonymous: false,
-    inputs: [
-      {
-        name: "newGovernance",
-        internalType: "address",
-        type: "address",
-        indexed: true,
-      },
-    ],
-    name: "GovernanceUpdated",
   },
   {
     type: "event",
@@ -3354,6 +3816,32 @@ export const licensingModuleAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "implementation",
         internalType: "address",
         type: "address",
@@ -3419,6 +3907,13 @@ export const licensingModuleAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "ipId", internalType: "address", type: "address" },
       { name: "licenseTemplate", internalType: "address", type: "address" },
@@ -3431,16 +3926,23 @@ export const licensingModuleAbi = [
   {
     type: "function",
     inputs: [],
-    name: "getGovernance",
+    name: "authority",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [{ name: "governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -3461,6 +3963,20 @@ export const licensingModuleAbi = [
     inputs: [],
     name: "name",
     outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
   },
   {
@@ -3496,8 +4012,8 @@ export const licensingModuleAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -3507,6 +4023,13 @@ export const licensingModuleAbi = [
     name: "supportsInterface",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -3521,14 +4044,14 @@ export const licensingModuleAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x2863c12344c440DdA89C7a930833825227ab12fa)
  */
 export const licensingModuleAddress = {
-  1513: "0xEeDDE5529122b621105798860F235c28FD3aBA40",
+  11155111: "0x2863c12344c440DdA89C7a930833825227ab12fa",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x2863c12344c440DdA89C7a930833825227ab12fa)
  */
 export const licensingModuleConfig = {
   address: licensingModuleAddress,
@@ -3540,10 +4063,28 @@ export const licensingModuleConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xCdF6892CEc284A8312843ca03052c6365c6ecf75)
  */
 export const moduleRegistryAbi = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
   {
     type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
@@ -3556,14 +4097,6 @@ export const moduleRegistryAbi = [
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "ModuleRegistry__InterfaceIdZero" },
   {
@@ -3601,6 +4134,7 @@ export const moduleRegistryAbi = [
   { type: "error", inputs: [], name: "ModuleRegistry__NameAlreadyRegistered" },
   { type: "error", inputs: [], name: "ModuleRegistry__NameDoesNotMatch" },
   { type: "error", inputs: [], name: "ModuleRegistry__NameEmptyString" },
+  { type: "error", inputs: [], name: "ModuleRegistry__ZeroAccessManager" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "UUPSUnauthorizedCallContext" },
   {
@@ -3613,13 +4147,13 @@ export const moduleRegistryAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
+        name: "authority",
         internalType: "address",
         type: "address",
-        indexed: true,
+        indexed: false,
       },
     ],
-    name: "GovernanceUpdated",
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -3697,7 +4231,7 @@ export const moduleRegistryAbi = [
   {
     type: "function",
     inputs: [],
-    name: "getGovernance",
+    name: "authority",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
@@ -3724,10 +4258,17 @@ export const moduleRegistryAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "governance_", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -3790,8 +4331,8 @@ export const moduleRegistryAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -3808,14 +4349,14 @@ export const moduleRegistryAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xCdF6892CEc284A8312843ca03052c6365c6ecf75)
  */
 export const moduleRegistryAddress = {
-  1513: "0xf2965E3B6251905Dd1E8671077760D07b0408cf2",
+  11155111: "0xCdF6892CEc284A8312843ca03052c6365c6ecf75",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xCdF6892CEc284A8312843ca03052c6365c6ecf75)
  */
 export const moduleRegistryConfig = {
   address: moduleRegistryAddress,
@@ -3827,7 +4368,7 @@ export const moduleRegistryConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x406adf3940DbDF5bE2B0C2A3129B34553e876E86)
  */
 export const piLicenseTemplateAbi = [
   {
@@ -3837,7 +4378,6 @@ export const piLicenseTemplateAbi = [
       { name: "ipAccountRegistry", internalType: "address", type: "address" },
       { name: "licenseRegistry", internalType: "address", type: "address" },
       { name: "royaltyModule", internalType: "address", type: "address" },
-      { name: "licenseToken", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
   },
@@ -3847,6 +4387,36 @@ export const piLicenseTemplateAbi = [
     name: "AccessControlled__NotIpAccount",
   },
   { type: "error", inputs: [], name: "AccessControlled__ZeroAddress" },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "target", internalType: "address", type: "address" }],
+    name: "AddressEmptyCode",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "implementation", internalType: "address", type: "address" }],
+    name: "ERC1967InvalidImplementation",
+  },
+  { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "FailedInnerCall" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "NotInitializing" },
   {
@@ -3909,6 +4479,7 @@ export const piLicenseTemplateAbi = [
     inputs: [],
     name: "PILicenseTemplate__RoyaltyPolicyRequiresCurrencyToken",
   },
+  { type: "error", inputs: [], name: "PILicenseTemplate__ZeroAccessManager" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
   {
     type: "error",
@@ -3918,12 +4489,31 @@ export const piLicenseTemplateAbi = [
     ],
     name: "StringsInsufficientHexLength",
   },
+  { type: "error", inputs: [], name: "UUPSUnauthorizedCallContext" },
+  {
+    type: "error",
+    inputs: [{ name: "slot", internalType: "bytes32", type: "bytes32" }],
+    name: "UUPSUnsupportedProxiableUUID",
+  },
   {
     type: "event",
     anonymous: false,
     inputs: [
       {
-        name: "licenseTokenId",
+        name: "authority",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "AuthorityUpdated",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "licenseTermsId",
         internalType: "uint256",
         type: "uint256",
         indexed: true,
@@ -3978,6 +4568,19 @@ export const piLicenseTemplateAbi = [
     name: "LicenseTermsRegistered",
   },
   {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "implementation",
+        internalType: "address",
+        type: "address",
+        indexed: true,
+      },
+    ],
+    name: "Upgraded",
+  },
+  {
     type: "function",
     inputs: [],
     name: "ACCESS_CONTROLLER",
@@ -4000,13 +4603,6 @@ export const piLicenseTemplateAbi = [
   {
     type: "function",
     inputs: [],
-    name: "LICENSE_NFT",
-    outputs: [{ name: "", internalType: "contract ILicenseToken", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [],
     name: "LICENSE_REGISTRY",
     outputs: [{ name: "", internalType: "contract ILicenseRegistry", type: "address" }],
     stateMutability: "view",
@@ -4016,6 +4612,20 @@ export const piLicenseTemplateAbi = [
     inputs: [],
     name: "ROYALTY_MODULE",
     outputs: [{ name: "", internalType: "contract IRoyaltyModule", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "UPGRADE_INTERFACE_VERSION",
+    outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "authority",
+    outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
@@ -4049,6 +4659,14 @@ export const piLicenseTemplateAbi = [
     type: "function",
     inputs: [
       {
+        name: "selectedLicenseTermsId",
+        internalType: "uint256",
+        type: "uint256",
+      },
+    ],
+    name: "getLicenseTerms",
+    outputs: [
+      {
         name: "terms",
         internalType: "struct PILTerms",
         type: "tuple",
@@ -4093,6 +4711,61 @@ export const piLicenseTemplateAbi = [
             type: "uint256",
           },
           { name: "currency", internalType: "address", type: "address" },
+          { name: "uri", internalType: "string", type: "string" },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      {
+        name: "terms",
+        internalType: "struct PILTerms",
+        type: "tuple",
+        components: [
+          { name: "transferable", internalType: "bool", type: "bool" },
+          { name: "royaltyPolicy", internalType: "address", type: "address" },
+          { name: "mintingFee", internalType: "uint256", type: "uint256" },
+          { name: "expiration", internalType: "uint256", type: "uint256" },
+          { name: "commercialUse", internalType: "bool", type: "bool" },
+          { name: "commercialAttribution", internalType: "bool", type: "bool" },
+          {
+            name: "commercializerChecker",
+            internalType: "address",
+            type: "address",
+          },
+          {
+            name: "commercializerCheckerData",
+            internalType: "bytes",
+            type: "bytes",
+          },
+          {
+            name: "commercialRevShare",
+            internalType: "uint32",
+            type: "uint32",
+          },
+          {
+            name: "commercialRevCelling",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "derivativesAllowed", internalType: "bool", type: "bool" },
+          {
+            name: "derivativesAttribution",
+            internalType: "bool",
+            type: "bool",
+          },
+          { name: "derivativesApproval", internalType: "bool", type: "bool" },
+          { name: "derivativesReciprocal", internalType: "bool", type: "bool" },
+          {
+            name: "derivativeRevCelling",
+            internalType: "uint256",
+            type: "uint256",
+          },
+          { name: "currency", internalType: "address", type: "address" },
+          { name: "uri", internalType: "string", type: "string" },
         ],
       },
     ],
@@ -4104,6 +4777,13 @@ export const piLicenseTemplateAbi = [
         type: "uint256",
       },
     ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "licenseTermsId", internalType: "uint256", type: "uint256" }],
+    name: "getLicenseTermsURI",
+    outputs: [{ name: "", internalType: "string", type: "string" }],
     stateMutability: "view",
   },
   {
@@ -4128,6 +4808,7 @@ export const piLicenseTemplateAbi = [
   {
     type: "function",
     inputs: [
+      { name: "accessManager", internalType: "address", type: "address" },
       { name: "name", internalType: "string", type: "string" },
       { name: "metadataURI", internalType: "string", type: "string" },
     ],
@@ -4137,8 +4818,16 @@ export const piLicenseTemplateAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [
-      { name: "licenseTokenId", internalType: "uint256", type: "uint256" },
+      { name: "parentIpId", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
       { name: "childIpId", internalType: "address", type: "address" },
     ],
     name: "isDerivativeApproved",
@@ -4157,6 +4846,13 @@ export const piLicenseTemplateAbi = [
     inputs: [],
     name: "name",
     outputs: [{ name: "", internalType: "string", type: "string" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "proxiableUUID",
+    outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
     stateMutability: "view",
   },
   {
@@ -4207,6 +4903,7 @@ export const piLicenseTemplateAbi = [
             type: "uint256",
           },
           { name: "currency", internalType: "address", type: "address" },
+          { name: "uri", internalType: "string", type: "string" },
         ],
       },
     ],
@@ -4217,11 +4914,19 @@ export const piLicenseTemplateAbi = [
   {
     type: "function",
     inputs: [
-      { name: "licenseTokenId", internalType: "uint256", type: "uint256" },
+      { name: "parentIpId", internalType: "address", type: "address" },
+      { name: "licenseTermsId", internalType: "uint256", type: "uint256" },
       { name: "childIpId", internalType: "address", type: "address" },
       { name: "approved", internalType: "bool", type: "bool" },
     ],
     name: "setApproval",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -4245,6 +4950,16 @@ export const piLicenseTemplateAbi = [
     name: "totalRegisteredLicenseTerms",
     outputs: [{ name: "", internalType: "uint256", type: "uint256" }],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [
+      { name: "newImplementation", internalType: "address", type: "address" },
+      { name: "data", internalType: "bytes", type: "bytes" },
+    ],
+    name: "upgradeToAndCall",
+    outputs: [],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -4292,14 +5007,14 @@ export const piLicenseTemplateAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x406adf3940DbDF5bE2B0C2A3129B34553e876E86)
  */
 export const piLicenseTemplateAddress = {
-  1513: "0xd0Be223ae9719bBD93447ecf5289319CCf8cA227",
+  11155111: "0x406adf3940DbDF5bE2B0C2A3129B34553e876E86",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x406adf3940DbDF5bE2B0C2A3129B34553e876E86)
  */
 export const piLicenseTemplateConfig = {
   address: piLicenseTemplateAddress,
@@ -4311,10 +5026,35 @@ export const piLicenseTemplateConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xb2CD61740d224040d3D025C8E45Ce5FE370472aa)
  */
 export const royaltyModuleAbi = [
-  { type: "constructor", inputs: [], stateMutability: "nonpayable" },
+  {
+    type: "constructor",
+    inputs: [
+      { name: "disputeModule", internalType: "address", type: "address" },
+      { name: "licenseRegistry", internalType: "address", type: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
+  },
   {
     type: "error",
     inputs: [{ name: "target", internalType: "address", type: "address" }],
@@ -4326,15 +5066,9 @@ export const royaltyModuleAbi = [
     name: "ERC1967InvalidImplementation",
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
@@ -4348,6 +5082,7 @@ export const royaltyModuleAbi = [
     inputs: [],
     name: "RoyaltyModule__IncompatibleRoyaltyPolicy",
   },
+  { type: "error", inputs: [], name: "RoyaltyModule__IpIsExpired" },
   { type: "error", inputs: [], name: "RoyaltyModule__IpIsTagged" },
   { type: "error", inputs: [], name: "RoyaltyModule__NoParentsOnLinking" },
   { type: "error", inputs: [], name: "RoyaltyModule__NoRoyaltyPolicySet" },
@@ -4362,7 +5097,9 @@ export const royaltyModuleAbi = [
     inputs: [],
     name: "RoyaltyModule__NotWhitelistedRoyaltyToken",
   },
+  { type: "error", inputs: [], name: "RoyaltyModule__ZeroAccessManager" },
   { type: "error", inputs: [], name: "RoyaltyModule__ZeroDisputeModule" },
+  { type: "error", inputs: [], name: "RoyaltyModule__ZeroLicenseRegistry" },
   { type: "error", inputs: [], name: "RoyaltyModule__ZeroLicensingModule" },
   { type: "error", inputs: [], name: "RoyaltyModule__ZeroRoyaltyPolicy" },
   { type: "error", inputs: [], name: "RoyaltyModule__ZeroRoyaltyToken" },
@@ -4377,13 +5114,13 @@ export const royaltyModuleAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
+        name: "authority",
         internalType: "address",
         type: "address",
-        indexed: true,
+        indexed: false,
       },
     ],
-    name: "GovernanceUpdated",
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -4428,6 +5165,19 @@ export const royaltyModuleAbi = [
       },
     ],
     name: "LicenseMintingFeePaid",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
   },
   {
     type: "event",
@@ -4499,6 +5249,19 @@ export const royaltyModuleAbi = [
     anonymous: false,
     inputs: [
       {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
         name: "implementation",
         internalType: "address",
         type: "address",
@@ -4510,30 +5273,51 @@ export const royaltyModuleAbi = [
   {
     type: "function",
     inputs: [],
+    name: "DISPUTE_MODULE",
+    outputs: [{ name: "", internalType: "contract IDisputeModule", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "LICENSE_REGISTRY",
+    outputs: [{ name: "", internalType: "contract ILicenseRegistry", type: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "UPGRADE_INTERFACE_VERSION",
     outputs: [{ name: "", internalType: "string", type: "string" }],
     stateMutability: "view",
   },
   {
     type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
-    name: "disputeModule",
+    name: "authority",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [],
-    name: "getGovernance",
-    outputs: [{ name: "", internalType: "address", type: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "_governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -4590,6 +5374,20 @@ export const royaltyModuleAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "receiverIpId", internalType: "address", type: "address" },
       { name: "payerAddress", internalType: "address", type: "address" },
@@ -4633,15 +5431,8 @@ export const royaltyModuleAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "dispute", internalType: "address", type: "address" }],
-    name: "setDisputeModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -4658,6 +5449,13 @@ export const royaltyModuleAbi = [
     name: "supportsInterface",
     outputs: [{ name: "", internalType: "bool", type: "bool" }],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -4692,14 +5490,14 @@ export const royaltyModuleAbi = [
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xb2CD61740d224040d3D025C8E45Ce5FE370472aa)
  */
 export const royaltyModuleAddress = {
-  1513: "0x551AD8CD7893003cE00500aC2aCF1E327763D9f6",
+  11155111: "0xb2CD61740d224040d3D025C8E45Ce5FE370472aa",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0xb2CD61740d224040d3D025C8E45Ce5FE370472aa)
  */
 export const royaltyModuleConfig = {
   address: royaltyModuleAddress,
@@ -4711,7 +5509,7 @@ export const royaltyModuleConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9882EB3D48b2F3646C87046Fc324e4F88dF01Fde)
  */
 export const royaltyPolicyLapAbi = [
   {
@@ -4721,6 +5519,24 @@ export const royaltyPolicyLapAbi = [
       { name: "licensingModule", internalType: "address", type: "address" },
     ],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "authority", internalType: "address", type: "address" }],
+    name: "AccessManagedInvalidAuthority",
+  },
+  {
+    type: "error",
+    inputs: [
+      { name: "caller", internalType: "address", type: "address" },
+      { name: "delay", internalType: "uint32", type: "uint32" },
+    ],
+    name: "AccessManagedRequiredDelay",
+  },
+  {
+    type: "error",
+    inputs: [{ name: "caller", internalType: "address", type: "address" }],
+    name: "AccessManagedUnauthorized",
   },
   {
     type: "error",
@@ -4738,15 +5554,9 @@ export const royaltyPolicyLapAbi = [
     name: "ERC1967InvalidImplementation",
   },
   { type: "error", inputs: [], name: "ERC1967NonPayable" },
+  { type: "error", inputs: [], name: "EnforcedPause" },
+  { type: "error", inputs: [], name: "ExpectedPause" },
   { type: "error", inputs: [], name: "FailedInnerCall" },
-  { type: "error", inputs: [], name: "Governance__InconsistentState" },
-  { type: "error", inputs: [], name: "Governance__OnlyProtocolAdmin" },
-  {
-    type: "error",
-    inputs: [{ name: "interfaceName", internalType: "string", type: "string" }],
-    name: "Governance__UnsupportedInterface",
-  },
-  { type: "error", inputs: [], name: "Governance__ZeroAddress" },
   { type: "error", inputs: [], name: "InvalidInitialization" },
   { type: "error", inputs: [], name: "NotInitializing" },
   { type: "error", inputs: [], name: "ReentrancyGuardReentrantCall" },
@@ -4769,6 +5579,7 @@ export const royaltyPolicyLapAbi = [
   },
   { type: "error", inputs: [], name: "RoyaltyPolicyLAP__NotRoyaltyModule" },
   { type: "error", inputs: [], name: "RoyaltyPolicyLAP__UnlinkableToParents" },
+  { type: "error", inputs: [], name: "RoyaltyPolicyLAP__ZeroAccessManager" },
   {
     type: "error",
     inputs: [],
@@ -4792,13 +5603,13 @@ export const royaltyPolicyLapAbi = [
     anonymous: false,
     inputs: [
       {
-        name: "newGovernance",
+        name: "authority",
         internalType: "address",
         type: "address",
-        indexed: true,
+        indexed: false,
       },
     ],
-    name: "GovernanceUpdated",
+    name: "AuthorityUpdated",
   },
   {
     type: "event",
@@ -4812,6 +5623,19 @@ export const royaltyPolicyLapAbi = [
       },
     ],
     name: "Initialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Paused",
   },
   {
     type: "event",
@@ -4849,6 +5673,38 @@ export const royaltyPolicyLapAbi = [
       },
     ],
     name: "PolicyInitialized",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "token",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+      {
+        name: "vault",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "RoyaltyTokenAddedToVault",
+  },
+  {
+    type: "event",
+    anonymous: false,
+    inputs: [
+      {
+        name: "account",
+        internalType: "address",
+        type: "address",
+        indexed: false,
+      },
+    ],
+    name: "Unpaused",
   },
   {
     type: "event",
@@ -4907,8 +5763,15 @@ export const royaltyPolicyLapAbi = [
   },
   {
     type: "function",
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
+    name: "__ProtocolPausable_init",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [],
-    name: "getGovernance",
+    name: "authority",
     outputs: [{ name: "", internalType: "address", type: "address" }],
     stateMutability: "view",
   },
@@ -4941,10 +5804,17 @@ export const royaltyPolicyLapAbi = [
   },
   {
     type: "function",
-    inputs: [{ name: "governance", internalType: "address", type: "address" }],
+    inputs: [{ name: "accessManager", internalType: "address", type: "address" }],
     name: "initialize",
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "isConsumingScheduledOp",
+    outputs: [{ name: "", internalType: "bytes4", type: "bytes4" }],
+    stateMutability: "view",
   },
   {
     type: "function",
@@ -4984,14 +5854,28 @@ export const royaltyPolicyLapAbi = [
   {
     type: "function",
     inputs: [],
+    name: "pause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    inputs: [],
+    name: "paused",
+    outputs: [{ name: "", internalType: "bool", type: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    inputs: [],
     name: "proxiableUUID",
     outputs: [{ name: "", internalType: "bytes32", type: "bytes32" }],
     stateMutability: "view",
   },
   {
     type: "function",
-    inputs: [{ name: "newGovernance", internalType: "address", type: "address" }],
-    name: "setGovernance",
+    inputs: [{ name: "newAuthority", internalType: "address", type: "address" }],
+    name: "setAuthority",
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -5011,6 +5895,13 @@ export const royaltyPolicyLapAbi = [
   },
   {
     type: "function",
+    inputs: [],
+    name: "unpause",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     inputs: [
       { name: "newImplementation", internalType: "address", type: "address" },
       { name: "data", internalType: "bytes", type: "bytes" },
@@ -5019,17 +5910,24 @@ export const royaltyPolicyLapAbi = [
     outputs: [],
     stateMutability: "payable",
   },
+  {
+    type: "function",
+    inputs: [{ name: "newVault", internalType: "address", type: "address" }],
+    name: "upgradeVaults",
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
 ] as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9882EB3D48b2F3646C87046Fc324e4F88dF01Fde)
  */
 export const royaltyPolicyLapAddress = {
-  1513: "0x2EcdB5bD12a037dCb9De0Ab7957f35FEeF758eA6",
+  11155111: "0x9882EB3D48b2F3646C87046Fc324e4F88dF01Fde",
 } as const;
 
 /**
- *
+ * [__View Contract on Sepolia Etherscan__](https://sepolia.etherscan.io/address/0x9882EB3D48b2F3646C87046Fc324e4F88dF01Fde)
  */
 export const royaltyPolicyLapConfig = {
   address: royaltyPolicyLapAddress,
@@ -5142,9 +6040,7 @@ export class AccessControllerEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "PermissionSet") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "PermissionSet") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5257,9 +6153,11 @@ export type DisputeModuleRaiseDisputeRequest = {
  * DisputeModuleResolveDisputeRequest
  *
  * @param disputeId uint256
+ * @param data bytes
  */
 export type DisputeModuleResolveDisputeRequest = {
   disputeId: bigint;
+  data: Hex;
 };
 
 /**
@@ -5305,9 +6203,7 @@ export class DisputeModuleEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "DisputeCancelled") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "DisputeCancelled") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5346,9 +6242,7 @@ export class DisputeModuleEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "DisputeRaised") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "DisputeRaised") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5387,9 +6281,7 @@ export class DisputeModuleEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "DisputeResolved") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "DisputeResolved") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5461,103 +6353,13 @@ export class DisputeModuleClient extends DisputeModuleEventClient {
       address: this.address,
       functionName: "resolveDispute",
       account: this.wallet.account,
-      args: [request.disputeId],
+      args: [request.disputeId, request.data],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
 }
 
 // Contract IPAccountImpl =============================================================
-
-/**
- * IpAccountImplExecuteRequest
- *
- * @param to address
- * @param value uint256
- * @param data bytes
- */
-export type IpAccountImplExecuteRequest = {
-  to: Address;
-  value: bigint;
-  data: Hex;
-};
-
-/**
- * IpAccountImplExecuteWithSigRequest
- *
- * @param to address
- * @param value uint256
- * @param data bytes
- * @param signer address
- * @param deadline uint256
- * @param signature bytes
- */
-export type IpAccountImplExecuteWithSigRequest = {
-  to: Address;
-  value: bigint;
-  data: Hex;
-  signer: Address;
-  deadline: bigint;
-  signature: Hex;
-};
-
-/**
- * contract IPAccountImpl write method
- */
-export class IpAccountImplClient {
-  protected readonly wallet: SimpleWalletClient;
-  protected readonly rpcClient: PublicClient;
-  public readonly address: Address;
-
-  constructor(rpcClient: PublicClient, wallet: SimpleWalletClient, address?: Address) {
-    this.address = address || getAddress(ipAccountImplAddress, rpcClient.chain?.id);
-    this.rpcClient = rpcClient;
-    this.wallet = wallet;
-  }
-
-  /**
-   * method execute for contract IPAccountImpl
-   *
-   * @param request IpAccountImplExecuteRequest
-   * @return Promise<WriteContractReturnType>
-   */
-  public async execute(request: IpAccountImplExecuteRequest): Promise<WriteContractReturnType> {
-    const { request: call } = await this.rpcClient.simulateContract({
-      abi: ipAccountImplAbi,
-      address: this.address,
-      functionName: "execute",
-      account: this.wallet.account,
-      args: [request.to, request.value, request.data],
-    });
-    return await this.wallet.writeContract(call as WriteContractParameters);
-  }
-
-  /**
-   * method executeWithSig for contract IPAccountImpl
-   *
-   * @param request IpAccountImplExecuteWithSigRequest
-   * @return Promise<WriteContractReturnType>
-   */
-  public async executeWithSig(
-    request: IpAccountImplExecuteWithSigRequest,
-  ): Promise<WriteContractReturnType> {
-    const { request: call } = await this.rpcClient.simulateContract({
-      abi: ipAccountImplAbi,
-      address: this.address,
-      functionName: "executeWithSig",
-      account: this.wallet.account,
-      args: [
-        request.to,
-        request.value,
-        request.data,
-        request.signer,
-        request.deadline,
-        request.signature,
-      ],
-    });
-    return await this.wallet.writeContract(call as WriteContractParameters);
-  }
-}
 
 // Contract IPAssetRegistry =============================================================
 
@@ -5611,10 +6413,12 @@ export type IpAssetRegistryIsRegisteredResponse = boolean;
 /**
  * IpAssetRegistryRegisterRequest
  *
+ * @param chainid uint256
  * @param tokenContract address
  * @param tokenId uint256
  */
 export type IpAssetRegistryRegisterRequest = {
+  chainid: bigint;
   tokenContract: Address;
   tokenId: bigint;
 };
@@ -5662,9 +6466,7 @@ export class IpAssetRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "IPRegistered") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "IPRegistered") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5737,7 +6539,7 @@ export class IpAssetRegistryClient extends IpAssetRegistryReadOnlyClient {
       address: this.address,
       functionName: "register",
       account: this.wallet.account,
-      args: [request.tokenContract, request.tokenId],
+      args: [request.chainid, request.tokenContract, request.tokenId],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -5746,6 +6548,22 @@ export class IpAssetRegistryClient extends IpAssetRegistryReadOnlyClient {
 // Contract IpRoyaltyVaultImpl =============================================================
 
 /**
+<<<<<<< Updated upstream
+=======
+ * IpRoyaltyVaultImplRevenueTokenClaimedEvent
+ *
+ * @param claimer address
+ * @param token address
+ * @param amount uint256
+ */
+export type IpRoyaltyVaultImplRevenueTokenClaimedEvent = {
+  claimer: Address;
+  token: Address;
+  amount: bigint;
+};
+
+/**
+>>>>>>> Stashed changes
  * IpRoyaltyVaultImplRoyaltyTokensCollectedEvent
  *
  * @param ancestorIpId address
@@ -5801,11 +6619,11 @@ export type IpRoyaltyVaultImplClaimRevenueBySnapshotBatchRequest = {
  * IpRoyaltyVaultImplClaimRevenueByTokenBatchRequest
  *
  * @param snapshotId uint256
- * @param tokens address[]
+ * @param tokenList address[]
  */
 export type IpRoyaltyVaultImplClaimRevenueByTokenBatchRequest = {
   snapshotId: bigint;
-  tokens: readonly Address[];
+  tokenList: readonly Address[];
 };
 
 /**
@@ -5830,6 +6648,48 @@ export class IpRoyaltyVaultImplEventClient {
   }
 
   /**
+<<<<<<< Updated upstream
+=======
+   * event RevenueTokenClaimed for contract IpRoyaltyVaultImpl
+   */
+  public watchRevenueTokenClaimedEvent(
+    onLogs: (txHash: Hex, ev: Partial<IpRoyaltyVaultImplRevenueTokenClaimedEvent>) => void,
+  ): WatchContractEventReturnType {
+    return this.rpcClient.watchContractEvent({
+      abi: ipRoyaltyVaultImplAbi,
+      address: this.address,
+      eventName: "RevenueTokenClaimed",
+      onLogs: (evs) => {
+        evs.forEach((it) => onLogs(it.transactionHash, it.args));
+      },
+    });
+  }
+
+  /**
+   * parse tx receipt event RevenueTokenClaimed for contract IpRoyaltyVaultImpl
+   */
+  public parseTxRevenueTokenClaimedEvent(
+    txReceipt: TransactionReceipt,
+  ): Array<IpRoyaltyVaultImplRevenueTokenClaimedEvent> {
+    const targetLogs: Array<IpRoyaltyVaultImplRevenueTokenClaimedEvent> = [];
+    for (const log of txReceipt.logs) {
+      try {
+        const event = decodeEventLog({
+          abi: ipRoyaltyVaultImplAbi,
+          eventName: "RevenueTokenClaimed",
+          data: log.data,
+          topics: log.topics,
+        });
+        if (event.eventName === "RevenueTokenClaimed") {targetLogs.push(event.args);}
+      } catch (e) {
+        /* empty */
+      }
+    }
+    return targetLogs;
+  }
+
+  /**
+>>>>>>> Stashed changes
    * event RoyaltyTokensCollected for contract IpRoyaltyVaultImpl
    */
   public watchRoyaltyTokensCollectedEvent(
@@ -5860,9 +6720,7 @@ export class IpRoyaltyVaultImplEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "RoyaltyTokensCollected") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "RoyaltyTokensCollected") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5901,9 +6759,7 @@ export class IpRoyaltyVaultImplEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "SnapshotCompleted") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "SnapshotCompleted") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -5996,7 +6852,7 @@ export class IpRoyaltyVaultImplClient extends IpRoyaltyVaultImplReadOnlyClient {
       address: this.address,
       functionName: "claimRevenueByTokenBatch",
       account: this.wallet.account,
-      args: [request.snapshotId, request.tokens],
+      args: [request.snapshotId, request.tokenList],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -6040,6 +6896,15 @@ export class IpRoyaltyVaultImplClient extends IpRoyaltyVaultImplReadOnlyClient {
 // Contract LicenseRegistry =============================================================
 
 /**
+ * LicenseRegistryAuthorityUpdatedEvent
+ *
+ * @param authority address
+ */
+export type LicenseRegistryAuthorityUpdatedEvent = {
+  authority: Address;
+};
+
+/**
  * LicenseRegistryExpirationTimeSetEvent
  *
  * @param ipId address
@@ -6048,15 +6913,6 @@ export class IpRoyaltyVaultImplClient extends IpRoyaltyVaultImplReadOnlyClient {
 export type LicenseRegistryExpirationTimeSetEvent = {
   ipId: Address;
   expireTime: bigint;
-};
-
-/**
- * LicenseRegistryGovernanceUpdatedEvent
- *
- * @param newGovernance address
- */
-export type LicenseRegistryGovernanceUpdatedEvent = {
-  newGovernance: Address;
 };
 
 /**
@@ -6119,6 +6975,8 @@ export type LicenseRegistryUpgradedEvent = {
 export type LicenseRegistryExpirationTimeResponse = Hex;
 
 export type LicenseRegistryUpgradeInterfaceVersionResponse = string;
+
+export type LicenseRegistryAuthorityResponse = Address;
 
 export type LicenseRegistryDisputeModuleResponse = Address;
 
@@ -6221,8 +7079,6 @@ export type LicenseRegistryGetExpireTimeRequest = {
 
 export type LicenseRegistryGetExpireTimeResponse = bigint;
 
-export type LicenseRegistryGetGovernanceResponse = Address;
-
 /**
  * LicenseRegistryGetMintingLicenseConfigRequest
  *
@@ -6301,6 +7157,8 @@ export type LicenseRegistryHasIpAttachedLicenseTermsRequest = {
 
 export type LicenseRegistryHasIpAttachedLicenseTermsResponse = boolean;
 
+export type LicenseRegistryIsConsumingScheduledOpResponse = Hex;
+
 /**
  * LicenseRegistryIsDerivativeIpRequest
  *
@@ -6311,6 +7169,30 @@ export type LicenseRegistryIsDerivativeIpRequest = {
 };
 
 export type LicenseRegistryIsDerivativeIpResponse = boolean;
+
+/**
+ * LicenseRegistryIsExpiredNowRequest
+ *
+ * @param ipId address
+ */
+export type LicenseRegistryIsExpiredNowRequest = {
+  ipId: Address;
+};
+
+export type LicenseRegistryIsExpiredNowResponse = boolean;
+
+/**
+ * LicenseRegistryIsParentIpRequest
+ *
+ * @param parentIpId address
+ * @param childIpId address
+ */
+export type LicenseRegistryIsParentIpRequest = {
+  parentIpId: Address;
+  childIpId: Address;
+};
+
+export type LicenseRegistryIsParentIpResponse = boolean;
 
 /**
  * LicenseRegistryIsRegisteredLicenseTemplateRequest
@@ -6366,10 +7248,10 @@ export type LicenseRegistryAttachLicenseTermsToIpRequest = {
 /**
  * LicenseRegistryInitializeRequest
  *
- * @param governance address
+ * @param accessManager address
  */
 export type LicenseRegistryInitializeRequest = {
-  governance: Address;
+  accessManager: Address;
 };
 
 /**
@@ -6394,6 +7276,15 @@ export type LicenseRegistryRegisterDerivativeIpRequest = {
  */
 export type LicenseRegistryRegisterLicenseTemplateRequest = {
   licenseTemplate: Address;
+};
+
+/**
+ * LicenseRegistrySetAuthorityRequest
+ *
+ * @param newAuthority address
+ */
+export type LicenseRegistrySetAuthorityRequest = {
+  newAuthority: Address;
 };
 
 /**
@@ -6425,15 +7316,6 @@ export type LicenseRegistrySetDisputeModuleRequest = {
 export type LicenseRegistrySetExpireTimeRequest = {
   ipId: Address;
   expireTime: bigint;
-};
-
-/**
- * LicenseRegistrySetGovernanceRequest
- *
- * @param newGovernance address
- */
-export type LicenseRegistrySetGovernanceRequest = {
-  newGovernance: Address;
 };
 
 /**
@@ -6507,6 +7389,45 @@ export class LicenseRegistryEventClient {
   }
 
   /**
+   * event AuthorityUpdated for contract LicenseRegistry
+   */
+  public watchAuthorityUpdatedEvent(
+    onLogs: (txHash: Hex, ev: Partial<LicenseRegistryAuthorityUpdatedEvent>) => void,
+  ): WatchContractEventReturnType {
+    return this.rpcClient.watchContractEvent({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      eventName: "AuthorityUpdated",
+      onLogs: (evs) => {
+        evs.forEach((it) => onLogs(it.transactionHash, it.args));
+      },
+    });
+  }
+
+  /**
+   * parse tx receipt event AuthorityUpdated for contract LicenseRegistry
+   */
+  public parseTxAuthorityUpdatedEvent(
+    txReceipt: TransactionReceipt,
+  ): Array<LicenseRegistryAuthorityUpdatedEvent> {
+    const targetLogs: Array<LicenseRegistryAuthorityUpdatedEvent> = [];
+    for (const log of txReceipt.logs) {
+      try {
+        const event = decodeEventLog({
+          abi: licenseRegistryAbi,
+          eventName: "AuthorityUpdated",
+          data: log.data,
+          topics: log.topics,
+        });
+        if (event.eventName === "AuthorityUpdated") {targetLogs.push(event.args);}
+      } catch (e) {
+        /* empty */
+      }
+    }
+    return targetLogs;
+  }
+
+  /**
    * event ExpirationTimeSet for contract LicenseRegistry
    */
   public watchExpirationTimeSetEvent(
@@ -6537,50 +7458,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "ExpirationTimeSet") {
-          targetLogs.push(event.args);
-        }
-      } catch (e) {
-        /* empty */
-      }
-    }
-    return targetLogs;
-  }
-
-  /**
-   * event GovernanceUpdated for contract LicenseRegistry
-   */
-  public watchGovernanceUpdatedEvent(
-    onLogs: (txHash: Hex, ev: Partial<LicenseRegistryGovernanceUpdatedEvent>) => void,
-  ): WatchContractEventReturnType {
-    return this.rpcClient.watchContractEvent({
-      abi: licenseRegistryAbi,
-      address: this.address,
-      eventName: "GovernanceUpdated",
-      onLogs: (evs) => {
-        evs.forEach((it) => onLogs(it.transactionHash, it.args));
-      },
-    });
-  }
-
-  /**
-   * parse tx receipt event GovernanceUpdated for contract LicenseRegistry
-   */
-  public parseTxGovernanceUpdatedEvent(
-    txReceipt: TransactionReceipt,
-  ): Array<LicenseRegistryGovernanceUpdatedEvent> {
-    const targetLogs: Array<LicenseRegistryGovernanceUpdatedEvent> = [];
-    for (const log of txReceipt.logs) {
-      try {
-        const event = decodeEventLog({
-          abi: licenseRegistryAbi,
-          eventName: "GovernanceUpdated",
-          data: log.data,
-          topics: log.topics,
-        });
-        if (event.eventName === "GovernanceUpdated") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "ExpirationTimeSet") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6619,9 +7497,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "Initialized") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "Initialized") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6660,9 +7536,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "LicenseTemplateRegistered") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "LicenseTemplateRegistered") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6701,9 +7575,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "MintingLicenseConfigSetForIP") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "MintingLicenseConfigSetForIP") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6742,9 +7614,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "MintingLicenseConfigSetLicense") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "MintingLicenseConfigSetLicense") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6781,9 +7651,7 @@ export class LicenseRegistryEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "Upgraded") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "Upgraded") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -6825,6 +7693,20 @@ export class LicenseRegistryReadOnlyClient extends LicenseRegistryEventClient {
       abi: licenseRegistryAbi,
       address: this.address,
       functionName: "UPGRADE_INTERFACE_VERSION",
+    });
+  }
+
+  /**
+   * method authority for contract LicenseRegistry
+   *
+   * @param request LicenseRegistryAuthorityRequest
+   * @return Promise<LicenseRegistryAuthorityResponse>
+   */
+  public async authority(): Promise<LicenseRegistryAuthorityResponse> {
+    return await this.rpcClient.readContract({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      functionName: "authority",
     });
   }
 
@@ -6970,20 +7852,6 @@ export class LicenseRegistryReadOnlyClient extends LicenseRegistryEventClient {
   }
 
   /**
-   * method getGovernance for contract LicenseRegistry
-   *
-   * @param request LicenseRegistryGetGovernanceRequest
-   * @return Promise<LicenseRegistryGetGovernanceResponse>
-   */
-  public async getGovernance(): Promise<LicenseRegistryGetGovernanceResponse> {
-    return await this.rpcClient.readContract({
-      abi: licenseRegistryAbi,
-      address: this.address,
-      functionName: "getGovernance",
-    });
-  }
-
-  /**
    * method getMintingLicenseConfig for contract LicenseRegistry
    *
    * @param request LicenseRegistryGetMintingLicenseConfigRequest
@@ -7072,6 +7940,20 @@ export class LicenseRegistryReadOnlyClient extends LicenseRegistryEventClient {
   }
 
   /**
+   * method isConsumingScheduledOp for contract LicenseRegistry
+   *
+   * @param request LicenseRegistryIsConsumingScheduledOpRequest
+   * @return Promise<LicenseRegistryIsConsumingScheduledOpResponse>
+   */
+  public async isConsumingScheduledOp(): Promise<LicenseRegistryIsConsumingScheduledOpResponse> {
+    return await this.rpcClient.readContract({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      functionName: "isConsumingScheduledOp",
+    });
+  }
+
+  /**
    * method isDerivativeIp for contract LicenseRegistry
    *
    * @param request LicenseRegistryIsDerivativeIpRequest
@@ -7085,6 +7967,40 @@ export class LicenseRegistryReadOnlyClient extends LicenseRegistryEventClient {
       address: this.address,
       functionName: "isDerivativeIp",
       args: [request.childIpId],
+    });
+  }
+
+  /**
+   * method isExpiredNow for contract LicenseRegistry
+   *
+   * @param request LicenseRegistryIsExpiredNowRequest
+   * @return Promise<LicenseRegistryIsExpiredNowResponse>
+   */
+  public async isExpiredNow(
+    request: LicenseRegistryIsExpiredNowRequest,
+  ): Promise<LicenseRegistryIsExpiredNowResponse> {
+    return await this.rpcClient.readContract({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      functionName: "isExpiredNow",
+      args: [request.ipId],
+    });
+  }
+
+  /**
+   * method isParentIp for contract LicenseRegistry
+   *
+   * @param request LicenseRegistryIsParentIpRequest
+   * @return Promise<LicenseRegistryIsParentIpResponse>
+   */
+  public async isParentIp(
+    request: LicenseRegistryIsParentIpRequest,
+  ): Promise<LicenseRegistryIsParentIpResponse> {
+    return await this.rpcClient.readContract({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      functionName: "isParentIp",
+      args: [request.parentIpId, request.childIpId],
     });
   }
 
@@ -7200,7 +8116,7 @@ export class LicenseRegistryClient extends LicenseRegistryReadOnlyClient {
       address: this.address,
       functionName: "initialize",
       account: this.wallet.account,
-      args: [request.governance],
+      args: [request.accessManager],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -7244,6 +8160,25 @@ export class LicenseRegistryClient extends LicenseRegistryReadOnlyClient {
       functionName: "registerLicenseTemplate",
       account: this.wallet.account,
       args: [request.licenseTemplate],
+    });
+    return await this.wallet.writeContract(call as WriteContractParameters);
+  }
+
+  /**
+   * method setAuthority for contract LicenseRegistry
+   *
+   * @param request LicenseRegistrySetAuthorityRequest
+   * @return Promise<WriteContractReturnType>
+   */
+  public async setAuthority(
+    request: LicenseRegistrySetAuthorityRequest,
+  ): Promise<WriteContractReturnType> {
+    const { request: call } = await this.rpcClient.simulateContract({
+      abi: licenseRegistryAbi,
+      address: this.address,
+      functionName: "setAuthority",
+      account: this.wallet.account,
+      args: [request.newAuthority],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -7301,25 +8236,6 @@ export class LicenseRegistryClient extends LicenseRegistryReadOnlyClient {
       functionName: "setExpireTime",
       account: this.wallet.account,
       args: [request.ipId, request.expireTime],
-    });
-    return await this.wallet.writeContract(call as WriteContractParameters);
-  }
-
-  /**
-   * method setGovernance for contract LicenseRegistry
-   *
-   * @param request LicenseRegistrySetGovernanceRequest
-   * @return Promise<WriteContractReturnType>
-   */
-  public async setGovernance(
-    request: LicenseRegistrySetGovernanceRequest,
-  ): Promise<WriteContractReturnType> {
-    const { request: call } = await this.rpcClient.simulateContract({
-      abi: licenseRegistryAbi,
-      address: this.address,
-      functionName: "setGovernance",
-      account: this.wallet.account,
-      args: [request.newGovernance],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -7575,9 +8491,7 @@ export class LicensingModuleEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "LicenseTokensMinted") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "LicenseTokensMinted") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -7733,15 +8647,24 @@ export class ModuleRegistryReadOnlyClient {
 // Contract PILicenseTemplate =============================================================
 
 /**
+ * PiLicenseTemplateAuthorityUpdatedEvent
+ *
+ * @param authority address
+ */
+export type PiLicenseTemplateAuthorityUpdatedEvent = {
+  authority: Address;
+};
+
+/**
  * PiLicenseTemplateDerivativeApprovedEvent
  *
- * @param licenseTokenId uint256
+ * @param licenseTermsId uint256
  * @param ipId address
  * @param caller address
  * @param approved bool
  */
 export type PiLicenseTemplateDerivativeApprovedEvent = {
-  licenseTokenId: bigint;
+  licenseTermsId: bigint;
   ipId: Address;
   caller: Address;
   approved: boolean;
@@ -7769,15 +8692,26 @@ export type PiLicenseTemplateLicenseTermsRegisteredEvent = {
   licenseTerms: Hex;
 };
 
+/**
+ * PiLicenseTemplateUpgradedEvent
+ *
+ * @param implementation address
+ */
+export type PiLicenseTemplateUpgradedEvent = {
+  implementation: Address;
+};
+
 export type PiLicenseTemplateAccessControllerResponse = Address;
 
 export type PiLicenseTemplateIpAccountRegistryResponse = Address;
 
-export type PiLicenseTemplateLicenseNftResponse = Address;
-
 export type PiLicenseTemplateLicenseRegistryResponse = Address;
 
 export type PiLicenseTemplateRoyaltyModuleResponse = Address;
+
+export type PiLicenseTemplateUpgradeInterfaceVersionResponse = string;
+
+export type PiLicenseTemplateAuthorityResponse = Address;
 
 /**
  * PiLicenseTemplateExistsRequest
@@ -7817,6 +8751,42 @@ export type PiLicenseTemplateGetExpireTimeRequest = {
 export type PiLicenseTemplateGetExpireTimeResponse = bigint;
 
 /**
+ * PiLicenseTemplateGetLicenseTermsRequest
+ *
+ * @param selectedLicenseTermsId uint256
+ */
+export type PiLicenseTemplateGetLicenseTermsRequest = {
+  selectedLicenseTermsId: bigint;
+};
+
+/**
+ * PiLicenseTemplateGetLicenseTermsResponse
+ *
+ * @param terms tuple
+ */
+export type PiLicenseTemplateGetLicenseTermsResponse = {
+  terms: {
+    transferable: boolean;
+    royaltyPolicy: Address;
+    mintingFee: bigint;
+    expiration: bigint;
+    commercialUse: boolean;
+    commercialAttribution: boolean;
+    commercializerChecker: Address;
+    commercializerCheckerData: Hex;
+    commercialRevShare: number;
+    commercialRevCelling: bigint;
+    derivativesAllowed: boolean;
+    derivativesAttribution: boolean;
+    derivativesApproval: boolean;
+    derivativesReciprocal: boolean;
+    derivativeRevCelling: bigint;
+    currency: Address;
+    uri: string;
+  };
+};
+
+/**
  * PiLicenseTemplateGetLicenseTermsIdRequest
  *
  * @param terms tuple
@@ -7839,6 +8809,7 @@ export type PiLicenseTemplateGetLicenseTermsIdRequest = {
     derivativesReciprocal: boolean;
     derivativeRevCelling: bigint;
     currency: Address;
+    uri: string;
   };
 };
 
@@ -7850,6 +8821,17 @@ export type PiLicenseTemplateGetLicenseTermsIdRequest = {
 export type PiLicenseTemplateGetLicenseTermsIdResponse = {
   selectedLicenseTermsId: bigint;
 };
+
+/**
+ * PiLicenseTemplateGetLicenseTermsUriRequest
+ *
+ * @param licenseTermsId uint256
+ */
+export type PiLicenseTemplateGetLicenseTermsUriRequest = {
+  licenseTermsId: bigint;
+};
+
+export type PiLicenseTemplateGetLicenseTermsUriResponse = string;
 
 export type PiLicenseTemplateGetMetadataUriResponse = string;
 
@@ -7877,14 +8859,18 @@ export type PiLicenseTemplateGetRoyaltyPolicyResponse = {
   currency: Address;
 };
 
+export type PiLicenseTemplateIsConsumingScheduledOpResponse = Hex;
+
 /**
  * PiLicenseTemplateIsDerivativeApprovedRequest
  *
- * @param licenseTokenId uint256
+ * @param parentIpId address
+ * @param licenseTermsId uint256
  * @param childIpId address
  */
 export type PiLicenseTemplateIsDerivativeApprovedRequest = {
-  licenseTokenId: bigint;
+  parentIpId: Address;
+  licenseTermsId: bigint;
   childIpId: Address;
 };
 
@@ -7902,6 +8888,8 @@ export type PiLicenseTemplateIsLicenseTransferableRequest = {
 export type PiLicenseTemplateIsLicenseTransferableResponse = boolean;
 
 export type PiLicenseTemplateNameResponse = string;
+
+export type PiLicenseTemplateProxiableUuidResponse = Hex;
 
 /**
  * PiLicenseTemplateSupportsInterfaceRequest
@@ -7941,10 +8929,12 @@ export type PiLicenseTemplateVerifyCompatibleLicensesResponse = boolean;
 /**
  * PiLicenseTemplateInitializeRequest
  *
+ * @param accessManager address
  * @param name string
  * @param metadataURI string
  */
 export type PiLicenseTemplateInitializeRequest = {
+  accessManager: Address;
   name: string;
   metadataURI: string;
 };
@@ -7972,20 +8962,43 @@ export type PiLicenseTemplateRegisterLicenseTermsRequest = {
     derivativesReciprocal: boolean;
     derivativeRevCelling: bigint;
     currency: Address;
+    uri: string;
   };
 };
 
 /**
  * PiLicenseTemplateSetApprovalRequest
  *
- * @param licenseTokenId uint256
+ * @param parentIpId address
+ * @param licenseTermsId uint256
  * @param childIpId address
  * @param approved bool
  */
 export type PiLicenseTemplateSetApprovalRequest = {
-  licenseTokenId: bigint;
+  parentIpId: Address;
+  licenseTermsId: bigint;
   childIpId: Address;
   approved: boolean;
+};
+
+/**
+ * PiLicenseTemplateSetAuthorityRequest
+ *
+ * @param newAuthority address
+ */
+export type PiLicenseTemplateSetAuthorityRequest = {
+  newAuthority: Address;
+};
+
+/**
+ * PiLicenseTemplateUpgradeToAndCallRequest
+ *
+ * @param newImplementation address
+ * @param data bytes
+ */
+export type PiLicenseTemplateUpgradeToAndCallRequest = {
+  newImplementation: Address;
+  data: Hex;
 };
 
 /**
@@ -8046,6 +9059,45 @@ export class PiLicenseTemplateEventClient {
   }
 
   /**
+   * event AuthorityUpdated for contract PILicenseTemplate
+   */
+  public watchAuthorityUpdatedEvent(
+    onLogs: (txHash: Hex, ev: Partial<PiLicenseTemplateAuthorityUpdatedEvent>) => void,
+  ): WatchContractEventReturnType {
+    return this.rpcClient.watchContractEvent({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      eventName: "AuthorityUpdated",
+      onLogs: (evs) => {
+        evs.forEach((it) => onLogs(it.transactionHash, it.args));
+      },
+    });
+  }
+
+  /**
+   * parse tx receipt event AuthorityUpdated for contract PILicenseTemplate
+   */
+  public parseTxAuthorityUpdatedEvent(
+    txReceipt: TransactionReceipt,
+  ): Array<PiLicenseTemplateAuthorityUpdatedEvent> {
+    const targetLogs: Array<PiLicenseTemplateAuthorityUpdatedEvent> = [];
+    for (const log of txReceipt.logs) {
+      try {
+        const event = decodeEventLog({
+          abi: piLicenseTemplateAbi,
+          eventName: "AuthorityUpdated",
+          data: log.data,
+          topics: log.topics,
+        });
+        if (event.eventName === "AuthorityUpdated") {targetLogs.push(event.args);}
+      } catch (e) {
+        /* empty */
+      }
+    }
+    return targetLogs;
+  }
+
+  /**
    * event DerivativeApproved for contract PILicenseTemplate
    */
   public watchDerivativeApprovedEvent(
@@ -8076,9 +9128,7 @@ export class PiLicenseTemplateEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "DerivativeApproved") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "DerivativeApproved") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -8117,9 +9167,7 @@ export class PiLicenseTemplateEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "Initialized") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "Initialized") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -8158,9 +9206,46 @@ export class PiLicenseTemplateEventClient {
           data: log.data,
           topics: log.topics,
         });
-        if (event.eventName === "LicenseTermsRegistered") {
-          targetLogs.push(event.args);
-        }
+        if (event.eventName === "LicenseTermsRegistered") {targetLogs.push(event.args);}
+      } catch (e) {
+        /* empty */
+      }
+    }
+    return targetLogs;
+  }
+
+  /**
+   * event Upgraded for contract PILicenseTemplate
+   */
+  public watchUpgradedEvent(
+    onLogs: (txHash: Hex, ev: Partial<PiLicenseTemplateUpgradedEvent>) => void,
+  ): WatchContractEventReturnType {
+    return this.rpcClient.watchContractEvent({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      eventName: "Upgraded",
+      onLogs: (evs) => {
+        evs.forEach((it) => onLogs(it.transactionHash, it.args));
+      },
+    });
+  }
+
+  /**
+   * parse tx receipt event Upgraded for contract PILicenseTemplate
+   */
+  public parseTxUpgradedEvent(
+    txReceipt: TransactionReceipt,
+  ): Array<PiLicenseTemplateUpgradedEvent> {
+    const targetLogs: Array<PiLicenseTemplateUpgradedEvent> = [];
+    for (const log of txReceipt.logs) {
+      try {
+        const event = decodeEventLog({
+          abi: piLicenseTemplateAbi,
+          eventName: "Upgraded",
+          data: log.data,
+          topics: log.topics,
+        });
+        if (event.eventName === "Upgraded") {targetLogs.push(event.args);}
       } catch (e) {
         /* empty */
       }
@@ -8206,20 +9291,6 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
   }
 
   /**
-   * method LICENSE_NFT for contract PILicenseTemplate
-   *
-   * @param request PiLicenseTemplateLicenseNftRequest
-   * @return Promise<PiLicenseTemplateLicenseNftResponse>
-   */
-  public async licenseNft(): Promise<PiLicenseTemplateLicenseNftResponse> {
-    return await this.rpcClient.readContract({
-      abi: piLicenseTemplateAbi,
-      address: this.address,
-      functionName: "LICENSE_NFT",
-    });
-  }
-
-  /**
    * method LICENSE_REGISTRY for contract PILicenseTemplate
    *
    * @param request PiLicenseTemplateLicenseRegistryRequest
@@ -8244,6 +9315,34 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
       abi: piLicenseTemplateAbi,
       address: this.address,
       functionName: "ROYALTY_MODULE",
+    });
+  }
+
+  /**
+   * method UPGRADE_INTERFACE_VERSION for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateUpgradeInterfaceVersionRequest
+   * @return Promise<PiLicenseTemplateUpgradeInterfaceVersionResponse>
+   */
+  public async upgradeInterfaceVersion(): Promise<PiLicenseTemplateUpgradeInterfaceVersionResponse> {
+    return await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "UPGRADE_INTERFACE_VERSION",
+    });
+  }
+
+  /**
+   * method authority for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateAuthorityRequest
+   * @return Promise<PiLicenseTemplateAuthorityResponse>
+   */
+  public async authority(): Promise<PiLicenseTemplateAuthorityResponse> {
+    return await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "authority",
     });
   }
 
@@ -8299,6 +9398,26 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
   }
 
   /**
+   * method getLicenseTerms for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateGetLicenseTermsRequest
+   * @return Promise<PiLicenseTemplateGetLicenseTermsResponse>
+   */
+  public async getLicenseTerms(
+    request: PiLicenseTemplateGetLicenseTermsRequest,
+  ): Promise<PiLicenseTemplateGetLicenseTermsResponse> {
+    const result = await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "getLicenseTerms",
+      args: [request.selectedLicenseTermsId],
+    });
+    return {
+      terms: result,
+    };
+  }
+
+  /**
    * method getLicenseTermsId for contract PILicenseTemplate
    *
    * @param request PiLicenseTemplateGetLicenseTermsIdRequest
@@ -8316,6 +9435,23 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
     return {
       selectedLicenseTermsId: result,
     };
+  }
+
+  /**
+   * method getLicenseTermsURI for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateGetLicenseTermsUriRequest
+   * @return Promise<PiLicenseTemplateGetLicenseTermsUriResponse>
+   */
+  public async getLicenseTermsUri(
+    request: PiLicenseTemplateGetLicenseTermsUriRequest,
+  ): Promise<PiLicenseTemplateGetLicenseTermsUriResponse> {
+    return await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "getLicenseTermsURI",
+      args: [request.licenseTermsId],
+    });
   }
 
   /**
@@ -8356,6 +9492,20 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
   }
 
   /**
+   * method isConsumingScheduledOp for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateIsConsumingScheduledOpRequest
+   * @return Promise<PiLicenseTemplateIsConsumingScheduledOpResponse>
+   */
+  public async isConsumingScheduledOp(): Promise<PiLicenseTemplateIsConsumingScheduledOpResponse> {
+    return await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "isConsumingScheduledOp",
+    });
+  }
+
+  /**
    * method isDerivativeApproved for contract PILicenseTemplate
    *
    * @param request PiLicenseTemplateIsDerivativeApprovedRequest
@@ -8368,7 +9518,7 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
       abi: piLicenseTemplateAbi,
       address: this.address,
       functionName: "isDerivativeApproved",
-      args: [request.licenseTokenId, request.childIpId],
+      args: [request.parentIpId, request.licenseTermsId, request.childIpId],
     });
   }
 
@@ -8400,6 +9550,20 @@ export class PiLicenseTemplateReadOnlyClient extends PiLicenseTemplateEventClien
       abi: piLicenseTemplateAbi,
       address: this.address,
       functionName: "name",
+    });
+  }
+
+  /**
+   * method proxiableUUID for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateProxiableUuidRequest
+   * @return Promise<PiLicenseTemplateProxiableUuidResponse>
+   */
+  public async proxiableUuid(): Promise<PiLicenseTemplateProxiableUuidResponse> {
+    return await this.rpcClient.readContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "proxiableUUID",
     });
   }
 
@@ -8494,7 +9658,7 @@ export class PiLicenseTemplateClient extends PiLicenseTemplateReadOnlyClient {
       address: this.address,
       functionName: "initialize",
       account: this.wallet.account,
-      args: [request.name, request.metadataURI],
+      args: [request.accessManager, request.name, request.metadataURI],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
@@ -8532,7 +9696,45 @@ export class PiLicenseTemplateClient extends PiLicenseTemplateReadOnlyClient {
       address: this.address,
       functionName: "setApproval",
       account: this.wallet.account,
-      args: [request.licenseTokenId, request.childIpId, request.approved],
+      args: [request.parentIpId, request.licenseTermsId, request.childIpId, request.approved],
+    });
+    return await this.wallet.writeContract(call as WriteContractParameters);
+  }
+
+  /**
+   * method setAuthority for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateSetAuthorityRequest
+   * @return Promise<WriteContractReturnType>
+   */
+  public async setAuthority(
+    request: PiLicenseTemplateSetAuthorityRequest,
+  ): Promise<WriteContractReturnType> {
+    const { request: call } = await this.rpcClient.simulateContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "setAuthority",
+      account: this.wallet.account,
+      args: [request.newAuthority],
+    });
+    return await this.wallet.writeContract(call as WriteContractParameters);
+  }
+
+  /**
+   * method upgradeToAndCall for contract PILicenseTemplate
+   *
+   * @param request PiLicenseTemplateUpgradeToAndCallRequest
+   * @return Promise<WriteContractReturnType>
+   */
+  public async upgradeToAndCall(
+    request: PiLicenseTemplateUpgradeToAndCallRequest,
+  ): Promise<WriteContractReturnType> {
+    const { request: call } = await this.rpcClient.simulateContract({
+      abi: piLicenseTemplateAbi,
+      address: this.address,
+      functionName: "upgradeToAndCall",
+      account: this.wallet.account,
+      args: [request.newImplementation, request.data],
     });
     return await this.wallet.writeContract(call as WriteContractParameters);
   }
