@@ -35,6 +35,7 @@ describe("Test IpAssetClient", function () {
       const res = await ipAssetClient.register({
         tokenContract: "0x1daAE3197Bc469Cb97B917aa460a12dD95c6627c",
         tokenId: "3",
+        chainId: "11155111",
       });
 
       expect(res.ipId).equal("0xd142822Dc1674154EaF4DDF38bbF7EF8f0D8ECe4");
@@ -53,6 +54,7 @@ describe("Test IpAssetClient", function () {
       const res = await ipAssetClient.register({
         tokenContract: "0x1daAE3197Bc469Cb97B917aa460a12dD95c6627c",
         tokenId: "3",
+        chainId: "11155111",
       });
 
       expect(res.txHash).equal(
@@ -83,6 +85,7 @@ describe("Test IpAssetClient", function () {
       const response = await ipAssetClient.register({
         tokenContract: "0x1daAE3197Bc469Cb97B917aa460a12dD95c6627c",
         tokenId: "3",
+        chainId: "11155111",
         txOptions: {
           waitForTransaction: true,
         },
@@ -104,6 +107,7 @@ describe("Test IpAssetClient", function () {
         await ipAssetClient.register({
           tokenContract: "0x1daAE3197Bc469Cb97B917aa460a12dD95c6627c",
           tokenId: "3",
+          chainId: "11155111",
           txOptions: {
             waitForTransaction: true,
           },

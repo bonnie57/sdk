@@ -48,6 +48,7 @@ describe.skip("Dispute Functions", () => {
     it.skip("resolve a dispute", async () => {
       const resolveDisputeRequest: ResolveDisputeRequest = {
         disputeId: 3,
+        data: "0x",
         txOptions: {
           waitForTransaction: true,
         },

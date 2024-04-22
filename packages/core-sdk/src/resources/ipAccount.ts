@@ -68,7 +68,6 @@ export class IPAccountClient {
         this.wallet,
         getAddress(request.accountAddress),
       );
-
       const txHash = await ipAccountClient.executeWithSig({
         to: request.to,
         value: parseToBigInt(0),
@@ -77,7 +76,7 @@ export class IPAccountClient {
         deadline: parseToBigInt(request.deadline),
         signature: request.signature,
       });
-
+      console.log("txHash", txHash);
       if (request.txOptions?.waitForTransaction) {
         await this.rpcClient.waitForTransactionReceipt({ hash: txHash });
       }
