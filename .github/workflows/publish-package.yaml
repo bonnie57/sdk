@@ -70,7 +70,7 @@ jobs:
             exit 1
           fi
 
-  build-test:
+  build-test-publish:
     needs:
       [print_version_to_publish, fetch_latest_version, fail_if_version_is_same]
     # Skip this job if the version to be published is the same as the latest version on NPM
@@ -126,43 +126,27 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Archive core sdk dist files
-        uses: actions/upload-artifact@v4
-        with:
-          name: core-sdk-dist
-          path: packages/core-sdk/dist
-          retention-days: 1
-
-      - name: Archive react sdk dist files
-        uses: actions/upload-artifact@v4
-        with:
-          name: react-sdk-dist
-          path: packages/react-sdk/dist
-          retention-days: 1
-
-  publish-core-sdk:
-    needs: [build-test]
-    # Skip this job if the version to be published is the same as the latest version on NPM
-    # and the event triggering the workflow is a push
-    if: ${{ needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: core-sdk-dist
-
-      - name: Publish to npm
+      - name: Publish core-sdk package to npm
+        if: ${{ needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
         run: |
+          cd packages/core-sdk
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish react-sdk package to npm
+        if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'}}
+        run: |
+          cd packages/react-sdk
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   create-release-core-sdk:
-    needs: [publish-core-sdk]
+    needs: [build-test-publish]
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
-    if: needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'
+    if: ${{needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
     with:
       version_to_publish: ${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
@@ -170,7 +154,7 @@ jobs:
   send_slack_notif:
     needs: [print_version_to_publish, build-test-publish, create_release]
   send_slack_notif-core-sdk:
-    needs: [publish-core-sdk, create-release-core-sdk]
+    needs: [build-test-publish, create-release-core-sdk]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
       short-desc: "${{ github.repository }}: Core-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
@@ -181,35 +165,17 @@ jobs:
       channel-name: ${{ secrets.SLACK_CHANNEL_ID_STORY_57BLOCKS }}
       slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
 
-  publish-react-sdk:
-    needs: [build-test]
-    # Skip this job if the version to be published is the same as the latest version on NPM
-    # and the event triggering the workflow is a push
-    if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download a single artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: react-sdk-dist
-
-      - name: Publish to npm
-        run: |
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   create-release-react-sdk:
-    needs: [publish-react-sdk]
+    needs: [build-test-publish]
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
-    if: needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'
+    if: ${{needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'}}
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
     with:
       version_to_publish: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
 
   send_slack_notif-react-sdk:
-    needs: [create-release-react-sdk, publish-react-sdk]
+    needs: [create-release-react-sdk, build-test-publish]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
       short-desc: "${{ github.repository }}: React-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
