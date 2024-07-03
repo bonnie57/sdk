@@ -143,7 +143,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   create-release-core-sdk:
-    needs: [build-test-publish]
+    needs: [build-test-publish, print_version_to_publish, fetch_latest_version]
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
     if: ${{ needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
@@ -166,7 +166,7 @@ jobs:
       slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
 
   create-release-react-sdk:
-    needs: [build-test-publish]
+    needs: [build-test-publish, print_version_to_publish, fetch_latest_version]
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
     if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push' }}
