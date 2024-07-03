@@ -2,12 +2,12 @@
   "name": "react-sdk57",
   "version": "1.0.6",
   "description": "The Story Protocol React SDK",
-  "main": "dist/story-protocol-react-sdk.cjs.js",
-  "module": "dist/story-protocol-react-sdk.esm.js",
+  "main": "dist/react-sdk57.cjs.js",
+  "module": "dist/react-sdk57.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/story-protocol-react-sdk.esm.js",
-      "default": "./dist/story-protocol-react-sdk.cjs.js"
+      "module": "./dist/react-sdk57.esm.js",
+      "default": "./dist/react-sdk57.cjs.js"
     },
     "./package.json": "./package.json"
   },
