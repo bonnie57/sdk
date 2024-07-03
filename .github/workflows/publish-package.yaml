@@ -81,7 +81,7 @@ jobs:
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
     if: ${{ ((needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published) || (needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published)) && github.event_name == 'push'}}
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, high-memory]
     environment: "beta-sepolia"
     env:
       RPC_PROVIDER_URL: ${{ secrets.RPC_PROVIDER_URL }}
