@@ -126,6 +126,20 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Archive core sdk dist files
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-sdk-dist
+          path: packages/core-sdk/dist
+          retention-days: 1
+
+      - name: Archive react sdk dist files
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-sdk-dist
+          path: packages/react-sdk/dist
+          retention-days: 1
+
   publish-core-sdk:
     needs: [build-test]
     # Skip this job if the version to be published is the same as the latest version on NPM
@@ -133,9 +147,13 @@ jobs:
     if: ${{ needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
     runs-on: ubuntu-latest
     steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: core-sdk-dist
+
       - name: Publish to npm
         run: |
-          cd packages/core-sdk
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -170,9 +188,13 @@ jobs:
     if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'}}
     runs-on: ubuntu-latest
     steps:
+      - name: Download a single artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: react-sdk-dist
+
       - name: Publish to npm
         run: |
-          cd packages/react-sdk
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
