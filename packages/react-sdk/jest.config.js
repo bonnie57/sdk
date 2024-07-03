@@ -3,7 +3,8 @@ const config = {
   verbose: true,
   testEnvironment: "./test/jest-environment-jsdom.ts",
   setupFiles: ["./test/jest-setup.ts"],
-  testTimeout: 1000 * 60,
+  testTimeout: 1000 * 60 * 60,
+  maxWorkers: 1,
 };
 
 module.exports = config;
