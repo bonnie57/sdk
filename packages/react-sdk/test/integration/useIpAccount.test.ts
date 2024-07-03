@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { mockERC721Address, getTokenId, walletClient } from "./utils/util";
 import {
   AccessPermission,
@@ -73,6 +73,9 @@ describe("useIpAccount Functions", () => {
           },
         })
       ).ipId!;
+      await waitFor(() => {
+        expect(ipId).toBeDefined();
+      });
     });
     data = encodeFunctionData({
       abi: accessControllerAbi,
