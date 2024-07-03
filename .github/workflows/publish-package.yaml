@@ -165,17 +165,17 @@ jobs:
       channel-name: ${{ secrets.SLACK_CHANNEL_ID_STORY_57BLOCKS }}
       slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
 
-  create-release-react-sdk:
-    needs: [build-test-publish, print_version_to_publish, fetch_latest_version]
-    # Skip this job if the version to be published is the same as the latest version on NPM
-    # and the event triggering the workflow is a push
-    if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push' }}
-    uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
-    with:
-      version_to_publish: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
+  # create-release-react-sdk:
+  #   needs: [build-test-publish, print_version_to_publish, fetch_latest_version]
+  #   # Skip this job if the version to be published is the same as the latest version on NPM
+  #   # and the event triggering the workflow is a push
+  #   if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push' }}
+  #   uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
+  #   with:
+  #     version_to_publish: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
 
   send_slack_notif-react-sdk:
-    needs: [create-release-react-sdk, build-test-publish]
+    needs: [build-test-publish]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
       short-desc: "${{ github.repository }}: React-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
