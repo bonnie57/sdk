@@ -52,6 +52,7 @@ jobs:
           echo "Latest version of @story-protocol/react-sdk on NPMJS is $REACT_SDK_LATEST_VERSION"
           echo "REACT_SDK_LATEST_VERSION=$REACT_SDK_LATEST_VERSION" >> $GITHUB_OUTPUT
           echo "${{secrets.SLACK_BOT_TOKEN}}"
+          echo "${{secrets.SLACK_CHANNEL_ID_STORY_57BLOCKS}}"
 
   # Fail the PR if the version to be published is the same as the latest version on NPM
   fail_if_version_is_same:
