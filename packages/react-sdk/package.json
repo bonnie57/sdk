@@ -1,6 +1,6 @@
 {
   "name": "react-sdk57",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "The Story Protocol React SDK",
   "main": "dist/react-sdk57.cjs.js",
   "module": "dist/react-sdk57.esm.js",
