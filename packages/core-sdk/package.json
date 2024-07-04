@@ -2,12 +2,12 @@
   "name": "core-sdk-57",
   "version": "0.0.1",
   "description": "Story Protocol Core SDK",
-  "main": "dist/story-protocol-core-sdk.cjs.js",
-  "module": "dist/story-protocol-core-sdk.esm.js",
+  "main": "dist/core-sdk-57.cjs.js",
+  "module": "dist/core-sdk-57.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/story-protocol-core-sdk.esm.js",
-      "default": "./dist/story-protocol-core-sdk.cjs.js"
+      "module": "./dist/core-sdk-57.esm.js",
+      "default": "./dist/core-sdk-57.cjs.js"
     },
     "./package.json": "./package.json"
   },
