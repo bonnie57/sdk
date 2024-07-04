@@ -5,6 +5,8 @@ const config = {
   setupFiles: ["./test/jest-setup.ts"],
   testTimeout: 1000 * 60 * 60,
   maxWorkers: 1,
+  preset: "ts-jest",
+  forceExit: true,
 };
 
 module.exports = config;
