@@ -156,8 +156,7 @@ jobs:
   send_slack_notif:
     needs: [print_version_to_publish, build-test-publish, create_release]
   send_slack_notif-core-sdk:
-    needs:
-      [build-test-publish, create-release-core-sdk, print_version_to_publish]
+    needs: [print_version_to_publish, create-release-core-sdk]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
       short-desc: "${{ github.repository }}: Core-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published}}"
@@ -178,7 +177,7 @@ jobs:
       tag_name: react-sdk@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
 
   send_slack_notif-react-sdk:
-    needs: [build-test-publish, print_version_to_publish]
+    needs: [print_version_to_publish, create-release-react-sdk]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
       short-desc: "${{ github.repository }}: React-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
