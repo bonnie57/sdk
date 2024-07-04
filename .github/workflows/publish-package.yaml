@@ -156,7 +156,7 @@ jobs:
     needs: [print_version_to_publish, create-release-core-sdk]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
-      short-desc: "${{ github.repository }}: Core-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published}}"
+      short-desc: "${{ github.repository }}: core-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published}}"
       title: "Published to Registry"
       img-url: "https://i.imgur.com/JHmKB0s.png"
       img-alt-text: "Published to Registry"
@@ -177,7 +177,7 @@ jobs:
     needs: [print_version_to_publish, create-release-react-sdk]
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-slack-notifs.yml@main
     with:
-      short-desc: "${{ github.repository }}: React-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
+      short-desc: "${{ github.repository }}: react-sdk package has been published to NPM Registry, version: ${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
       title: "Published to Registry"
       img-url: "https://i.imgur.com/JHmKB0s.png"
       img-alt-text: "Published to Registry"
