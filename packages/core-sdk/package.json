@@ -1,5 +1,5 @@
 {
-  "name": "@story-protocol/core-sdk",
+  "name": "core-sdk-57",
   "version": "1.0.0-rc.15",
   "description": "Story Protocol Core SDK",
   "main": "dist/story-protocol-core-sdk.cjs.js",
