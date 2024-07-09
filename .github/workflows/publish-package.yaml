@@ -1,4 +1,5 @@
 name: Publish to npm, Tag and create GH Release
+
 on:
   push:
     branches:
@@ -6,9 +7,11 @@ on:
   pull_request:
     branches:
       - main
+
 jobs:
   Timestamp:
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-timestamp.yml@main
+
   print_version_to_publish:
     needs: [Timestamp]
     runs-on: ubuntu-latest
@@ -18,6 +21,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - name: Get version to publish
         id: get_version_to_publish
         run: |
@@ -25,6 +29,7 @@ jobs:
           echo "CORE_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
+
   # Fetch the latest version from NPM
   fetch_latest_version:
     needs: [Timestamp]
@@ -36,8 +41,8 @@ jobs:
       - name: Get latest package version
         id: get_latest_version
         run: |
-          CORE_SDK_LATEST_VERSION=$(npm view core-sdk-57 version --silent)
-          REACT_SDK_LATEST_VERSION=$(npm view react-sdk57 version --silent || true)
+          CORE_SDK_LATEST_VERSION=$(npm view @story-protocol/core-sdk version --silent)
+          REACT_SDK_LATEST_VERSION=$(npm view @story-protocol/react-sdk version --silent || true)
           if [ -z "$REACT_SDK_LATEST_VERSION" ]; then
             echo "@story-protocol/react-sdk package not found on NPMJS"
             REACT_SDK_LATEST_VERSION="Not_Published"
@@ -63,6 +68,7 @@ jobs:
             echo "The core-sdk and react-sdk versions to be published are the same as the latest versions on NPM. "
             exit 1
           fi
+
   build-test-publish:
     needs:
       [print_version_to_publish, fetch_latest_version, fail_if_version_is_same]
@@ -85,31 +91,40 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+
+      - uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598 # v2.4.0
         with:
           version: 8.8.0
+
       - name: Setup Node.js environment
         uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
         with:
           node-version: 20.0.0
           cache: pnpm
           registry-url: https://registry.npmjs.org/
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+
       - name: Install dependencies
         run: pnpm install
+
       - name: Fix
         run: pnpm fix
+
       - name: Run Anvil
         id: run_anvil
         run: anvil --fork-url ${SEPOLIA_RPC_PROVIDER_URL}  --silent &
+
       - name: Check on Run Anvil
         if: steps.run_anvil.outcome != 'success'
         run: exit 1
+
       - name: Test
         run: pnpm test
+
       - name: Build
         run: pnpm build
       - name: Publish core-sdk package to npm
@@ -119,6 +134,7 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish react-sdk package to npm
         if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push'}}
         run: |
@@ -126,12 +142,13 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
   create-release-core-sdk:
     needs: [build-test-publish, print_version_to_publish, fetch_latest_version]
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
     if: ${{ needs.fetch_latest_version.outputs.core_sdk_latest_version != needs.print_version_to_publish.outputs.core_sdk_version_to_be_published && github.event_name == 'push'}}
-    uses: bonnie57/gha-workflows/.github/workflows/reusable-create-release.yml@main
+    uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
     with:
       tag_name: core-sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
 
@@ -152,7 +169,7 @@ jobs:
     # Skip this job if the version to be published is the same as the latest version on NPM
     # and the event triggering the workflow is a push
     if: ${{ needs.fetch_latest_version.outputs.react_sdk_latest_version != needs.print_version_to_publish.outputs.react_sdk_version_to_be_published && github.event_name == 'push' }}
-    uses: bonnie57/gha-workflows/.github/workflows/reusable-create-release.yml@main
+    uses: storyprotocol/gha-workflows/.github/workflows/reusable-create-release.yml@main
     with:
       tag_name: react-sdk@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
 
