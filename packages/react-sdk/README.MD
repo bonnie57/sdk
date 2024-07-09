@@ -72,7 +72,7 @@ Under the `typescript-sdk/packages/react-sdk` directory:
 
 - Run `pnpm install`. This installs `@story-protocol/react-sdk@<version>` with your local changes.
 
-### Steps to Refresh the Changes
+### Steps to Refresh the Change1s
 
 Under the `typescript-sdk/packages/react-sdk` directory:
 
