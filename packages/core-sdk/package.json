@@ -1,6 +1,6 @@
 {
   "name": "core-sdk-57",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Story Protocol Core SDK",
   "main": "dist/core-sdk-57.cjs.js",
   "module": "dist/core-sdk-57.esm.js",
