@@ -1,13 +1,13 @@
 {
-  "name": "react-sdk57",
-  "version": "1.0.23",
+  "name": "@bonnie57/react-sdk",
+  "version": "0.0.1",
   "description": "The Story Protocol React SDK",
-  "main": "dist/react-sdk57.cjs.js",
-  "module": "dist/react-sdk57.esm.js",
+  "main": "dist/bonnie57-react-sdk.cjs.js",
+  "module": "dist/bonnie57-react-sdk.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/react-sdk57.esm.js",
-      "default": "./dist/react-sdk57.cjs.js"
+      "module": "./dist/bonnie57-react-sdk.esm.js",
+      "default": "./dist/bonnie57-react-sdk.cjs.js"
     },
     "./package.json": "./package.json"
   },
