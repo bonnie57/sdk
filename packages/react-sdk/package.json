@@ -1,6 +1,6 @@
 {
   "name": "@bonnie57/react-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The Story Protocol React SDK",
   "main": "dist/bonnie57-react-sdk.cjs.js",
   "module": "dist/bonnie57-react-sdk.esm.js",
