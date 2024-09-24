@@ -22,7 +22,7 @@ export class DisputeClient {
   }
 
   /**
-   * Raises a dispute o2 a given ipId
+   * Raises a dispute o2 a givewwn ipId
    * @param request - The request object containing necessary data to raise a dispute.
    *   @param request.targetIpId - The IP ID that is the target of the dispute.
    *   @param request.arbitrationPolicy - The address of the arbitration policy.
