@@ -30,6 +30,7 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}>> $GITHUB_OUTPUT
           fi
           echo "Branch name is ${{ steps.extract_branch_name.outputs.branch_name }}"
+
   print_version_to_publish:
     needs: [extract_branch_name]
     runs-on: ubuntu-latest
@@ -47,25 +48,29 @@ jobs:
           echo "CORE_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
-
+     
+  check_if_version_is_valid_for_branch:
+    needs: [print_version_to_publish]
+    runs-on: ubuntu-latest
+    steps:
       - name: Check if version is valid for branch
-        run: |
-          BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
-          SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
-          REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
-          if [[ "$BRANCH_NAME" == "v1.1" && ! "$SDK_VERSION" =~ ^v1\.1 ]]; then
-            echo "Error: Invalid version '$SDK_VERSION' for branch 'v1.1, only can publish v1.1.x versions"'"
-            exit 1
-          fi
+      run: |
+        BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
+        SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
+        REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
+        if [[ "$BRANCH_NAME" == "v1.1" && ! "$SDK_VERSION" =~ ^v1\.1 ]]; then
+          echo "Error: Invalid version "$SDK_VERSION" for branch v1.1, only can publish v1.1.x versions"
+          exit 1
+        fi
 
-          if [[ "$BRANCH_NAME" == "main" && ! "$SDK_VERSION" =~ ^v1\.2 ]]; then
-            echo "Error: Invalid version '$SDK_VERSION' for branch 'main, only can publish v1.2.x versions"'"
-            exit 1
-          fi
+        if [[ "$BRANCH_NAME" == "main" && ! "$SDK_VERSION" =~ ^v1\.2 ]]; then
+          echo "Error: Invalid version "$SDK_VERSION" for branch main, only can publish v1.2.x versions"
+          exit 1
+        fi
 
   # Fetch the latest version from NPM
   fetch_latest_version:
-    needs: [extract_branch_name]
+    needs: [print_version_to_publish,check_if_version_is_valid_for_branch]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
