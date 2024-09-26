@@ -27,7 +27,7 @@ export class DisputeClient {
    *   @param request.targetIpId - The IP ID that is the target of the dispute.
    *   @param request.arbitrationPolicy - The address of the arbitration policy.
    *   @param request.linkToDisputeEvidence - The link to the dispute evidence.
-   *   @param request.targetTag - The target tag of the dispute.
+   *   @param request.targetTag - The dtarget tag of the dispute.
    *   @param request.calldata - Optional calldata to initialize the policy.
    *   @param request.txOptions - [Optional] transaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns A Promise that resolves to a RaiseDisputeResponse containing the transaction hash.
