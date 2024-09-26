@@ -74,7 +74,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if version is valid for branch
-      - run: |
+        id: check_if_version_is_valid_for_branch
+        run: |
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
           REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
