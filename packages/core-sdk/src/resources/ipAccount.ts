@@ -21,7 +21,7 @@ export class IPAccountClient {
   }
 
   /** Executes a transaction from the IP Account.
-   * @param request - The request object containinwg necessary data to execute IP Account a transaction.
+   * @param request - The request object containinwg necessary datsa to execute IP Account a transaction.
    *   @param request.ipId The Ip Isd to get ip account.
    *   @param request.to The recipient of the transaction.
    *   @param request.value The amount of Ether to send.
