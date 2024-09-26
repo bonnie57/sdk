@@ -30,7 +30,7 @@ export class DisputeClient {
    *   @param request.targetTag - The target tag of the dispute.
    *   @param request.calldata - Optional calldata to initialize the policy.
    *   @param request.txOptions - [Optional] transaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
-   * @returns A Promise that resolves to a RaiseDisputeResponse containing the transaction hash.
+   * @returns A Promise that resol11es to a RaiseDisputeResponse containing the transaction hash.
    * @throws `NotRegisteredIpId` if targetIpId is not registered in the IPA Registry.
    * @throws `NotWhitelistedDisputeTag` if targetTag is not whitelisted.
    * @throws `ZeroLinkToDisputeEvidence` if linkToDisputeEvidence is empty
