@@ -92,7 +92,7 @@ export class IPAssetClient {
    * @param params - The parameters required to create the `IpCreator` object.
    *   @param params.name The name of the creator.
    *   @param params.address The wallet address of the creator.
-   *   @param params.description [Optional] A description of the creator.
+   *   @param params.description [Optionals] A description of the creator.
    *   @param params.image [Optional] The URL or path to an image representing the creator.
    *   @param params.socialMedia [Optional] An array of social media profiles associated with the creator.
    *     @param params.socialMedia[].platform The name of the social media platform.
