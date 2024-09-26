@@ -4,16 +4,28 @@ on:
   push:
     branches:
       - main
+      - v1.1
   pull_request:
     branches:
       - main
+      - v1.1
 
 jobs:
-  Timestamp:
+  timestamp:
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-timestamp.yml@main
 
+  extract_branch_name:
+    needs: [timestamp]
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.extract_branch_name.outputs.branch_name }}
+    steps:
+      - name: Extract branch name
+        id: extract_branch_name
+        run: echo "branch_name=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
+
   print_version_to_publish:
-    needs: [Timestamp]
+    needs: [extract_branch_name]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_version_to_be_published: ${{ steps.get_version_to_publish.outputs.CORE_SDK_VERSION_TO_BE_PUBLISHED }}
@@ -30,9 +42,20 @@ jobs:
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
 
+      - name: Check if version is valid for branch
+        run: |
+            if [[ "${{ needs.extract_branch_name.outputs.branch_name }}" == "v1.1" && ! "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" =~ ^v1\.1\..* ]]; then
+              echo "Error: Invalid version for branch v1.1"
+              exit 1
+              fi
+              if [[ "${{ needs.extract_branch_name.outputs.branch_name }}" == "main" && ! "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" =~ ^v1\.2\..* ]]; then
+              echo "Error: Invalid version for branch main"
+              exit 1
+              fi
+
   # Fetch the latest version from NPM
   fetch_latest_version:
-    needs: [Timestamp]
+    needs: [extract_branch_name]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
