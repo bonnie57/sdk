@@ -44,7 +44,7 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
           else
           branch_name=${GITHUB_HEAD_REF}
-          echo "BRANCH_NAME=${GITHUB_HEAD_REF} >> $GITHUB_OUTPUT
+          echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           fi
           echo "Branch name is '${BRANCH_NAME}'"
   # Fetch the latest version from NPM
@@ -70,7 +70,7 @@ jobs:
           echo "REACT_SDK_LATEST_VERSION=$REACT_SDK_LATEST_VERSION" >> $GITHUB_OUTPUT
 
   check_if_version_is_valid_for_branch:
-    needs: [print_version_to_publish]
+    needs: [extract_branch_name, print_version_to_publish]
     runs-on: ubuntu-latest
     steps:
       - name: Check if version is valid for branch
