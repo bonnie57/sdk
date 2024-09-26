@@ -23,16 +23,13 @@ jobs:
       - name: Extract branch name
         id: extract_branch_name
         run: |
-          echo "BRANCH_NAME=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
-          echo "Branch name is ${{ steps.extract_branch_name.outputs.branch_name }}"
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
           echo "BRANCH_NAME=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
           else
           branch_name=${GITHUB_HEAD_REF}
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}>> $GITHUB_OUTPUT
           fi
-          # Export as GitHub Actions output
-          echo "branch_name: $BRANCH_NAME"
+          echo "Branch name is ${{ steps.extract_branch_name.outputs.branch_name }}"
   print_version_to_publish:
     needs: [extract_branch_name]
     runs-on: ubuntu-latest
@@ -53,14 +50,18 @@ jobs:
 
       - name: Check if version is valid for branch
         run: |
-          if [[ "${{ needs.extract_branch_name.outputs.branch_name }}" == "v1.1" && ! "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" =~ ^v1\.1 ]]; then
-            echo "Error: Invalid version for branch v1.1"
+          BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
+          SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
+          REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
+          if [[ "$BRANCH_NAME" == "v1.1" && ! "$SDK_VERSION" =~ ^v1\.1 ]]; then
+            echo "Error: Invalid version '$SDK_VERSION' for branch 'v1.1, only can publish v1.1.x versions"'"
             exit 1
-            fi
-            if [[ "${{ needs.extract_branch_name.outputs.branch_name }}" == "main" && ! "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" =~ ^v1\.2\]]; then
-            echo "Error: Invalid version for branch main"
+          fi
+
+          if [[ "$BRANCH_NAME" == "main" && ! "$SDK_VERSION" =~ ^v1\.2 ]]; then
+            echo "Error: Invalid version '$SDK_VERSION' for branch 'main, only can publish v1.2.x versions"'"
             exit 1
-            fi
+          fi
 
   # Fetch the latest version from NPM
   fetch_latest_version:
