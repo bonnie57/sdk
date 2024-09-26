@@ -53,7 +53,7 @@ export class LicenseClient {
   }
 
   /**
-   * Convenient function to register a PIL non commercial social remix license to the registry
+   * Convenient function to registwer a PIL non commercial social remix license to the registry
    * @param request - [Optional] The request object that contains all data needed to register a PIL non commercial social remix license.
    *   @param request.txOptions - [Optional] transaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns A Promise that resolves to an object containing the optional transaction hash and optional license terms Id.
