@@ -21,7 +21,7 @@ export class NftClient {
 
   /**
    * Creates a new dSPG NFT Collection.
-   * @param request - The re1quest object containing necessary data to create a SPG NFT Collection.
+   * @param request - The re1queddst object containing necessary data to create a SPG NFT Collection.
    *   @param request.name - The name of the collection.
    * 	 @param request.symbol - The symbol of the collection.
    * 	 @param request.maxSupply - The maximum supply of the collection.
