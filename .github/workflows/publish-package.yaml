@@ -48,39 +48,10 @@ jobs:
           echo "CORE_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
-     
-  check_if_version_is_valid_for_branch:
-    needs: [print_version_to_publish]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if version is valid for branch
-      run: |
-        BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
-        SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
-        REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
-        if [[ "$BRANCH_NAME" == "v1.1" ]]; then
-            if ! [[ "$SDK_VERSION" =~ ^v1\.1 ]]; then
-              echo "Error: Invalid version '$SDK_VERSION' for branch 'v1.1'"
-              exit 1
-            fi
-            if ! [[ "$REACT_SDK_VERSION" =~ ^v1\.1 ]]; then
-            echo "Error: Invalid version '$REACT_SDK_VERSION' for branch 'v1.1'"
-            exit 1
-          fi 
-        else
-            if ! [[ "$SDK_VERSION" =~ ^v1\.2 ]]; then
-              echo "Error: Invalid version '$SDK_VERSION' for branch 'main'"
-              exit 1
-            fi
-            if ! [[ "$REACT_SDK_VERSION" =~ ^v1\.2 ]]; then
-              echo "Error: Invalid version '$REACT_SDK_VERSION' for branch 'main'"
-              exit 1
-            fi
-        fi    
 
   # Fetch the latest version from NPM
   fetch_latest_version:
-    needs: [print_version_to_publish,check_if_version_is_valid_for_branch]
+    needs: [print_version_to_publish]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
