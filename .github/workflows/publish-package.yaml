@@ -23,29 +23,16 @@ jobs:
       - name: Extract branch name
         id: extract_branch_name
         run: |
-          echo "branch_name=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
+          echo "BRANCH_NAME=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
           echo "Branch name is ${{ steps.extract_branch_name.outputs.branch_name }}"
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-          branch_name=${GITHUB_REF#refs/heads/}
+          echo "BRANCH_NAME=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
+          else
+          branch_name=${GITHUB_HEAD_REF}
+          echo "BRANCH_NAME=${GITHUB_HEAD_REF}>> $GITHUB_OUTPUT
           fi
-
-          # For `pull_request` event
-          if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-            SOURCE_BRANCH=${GITHUB_HEAD_REF}
-            TARGET_BRANCH=${GITHUB_BASE_REF}
-            echo "Source branch: $SOURCE_BRANCH"
-            echo "Target branch: $TARGET_BRANCH"
-          fi
-
-          echo "Branch name: $BRANCH_NAME"
-          echo "Source branch: $SOURCE_BRANCH"
-          echo "Target branch: $TARGET_BRANCH"
-
           # Export as GitHub Actions output
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_ENV
-          echo "source_branch=$SOURCE_BRANCH" >> $GITHUB_ENV
-          echo "target_branch=$TARGET_BRANCH" >> $GITHUB_ENV
-
+          echo "branch_name: $BRANCH_NAME"
   print_version_to_publish:
     needs: [extract_branch_name]
     runs-on: ubuntu-latest
