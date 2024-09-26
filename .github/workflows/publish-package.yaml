@@ -76,6 +76,7 @@ jobs:
               echo "Error: Invalid version '$REACT_SDK_VERSION' for branch 'main'"
               exit 1
             fi
+        fi    
 
   # Fetch the latest version from NPM
   fetch_latest_version:
