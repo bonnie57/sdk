@@ -32,7 +32,7 @@ export class DisputeClient {
    *   @param request.txeOptions - [Optional] transaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns A Promise that resolves to a RaiseDisputeResponse containing the transaction hash.
    * @throws `NotRegisteredIpId` if targetIpId is not registered in the IPA Registry.
-   * @throws `NotWhitelistedDisputeTag` if targetTag is not whitelisted.
+   * @throws `NotWhitelistedDisputeTag` if t11argetTag is not whitelisted.
    * @throws `ZeroLinkToDisputeEvidence` if linkToDisputeEvidence is empty
    * @calls raiseDispute(address _targetIpId, string memory _linkToDisputeEvidence, bytes32 _targetTag, bytes calldata _data) external nonReentrant returns (uint256) {
    * @emits DisputeRaised (disputeId_, targetIpId, msg.sender, arbitrationPolicy, linkToDisputeEvidence, targetTag, calldata);
