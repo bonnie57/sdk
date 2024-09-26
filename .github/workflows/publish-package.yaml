@@ -79,13 +79,13 @@ jobs:
           SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
           REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
           if [[ "$BRANCH_NAME" == "v1.1" ]]; then
-            if ! [[ "$SDK_VERSION" =~ ^1\.1 ]] || ! [[ "$REACT_SDK_VERSION" =~ ^1\.1 ]]; then
-               echo "Error: Invalid version @story-protocol/core-sdk@'$SDK_VERSION' or @story-protocol/react-sdk@'$REACT_SDK_VERSION' for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
+            if ! [[ "$SDK_VERSION" =~ ^1\.1 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.1 ]]; then
+               echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
               exit 1
             fi
           else
-            if ! [[ "$SDK_VERSION" =~ ^1\.2 ]] || ! [[ "$REACT_SDK_VERSION" =~ ^1\.2 ]]; then
-            echo "Error: Invalid version @story-protocol/core-sdk@'$SDK_VERSION' or @story-protocol/react-sdk@'$REACT_SDK_VERSION' for branch 'main', only versions starting with '1.2' are allowed in main branch"
+            if ! [[ "$SDK_VERSION" =~ ^1\.2 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.2 ]]; then
+            echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'main', only versions starting with '1.2' are allowed in main branch"
             exit 1
             fi
           fi
