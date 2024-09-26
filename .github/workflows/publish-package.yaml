@@ -4,16 +4,18 @@ on:
   push:
     branches:
       - main
+      - v1.1
   pull_request:
     branches:
       - main
+      - v1.1
 
 jobs:
-  Timestamp:
+  timestamp:
     uses: storyprotocol/gha-workflows/.github/workflows/reusable-timestamp.yml@main
 
   print_version_to_publish:
-    needs: [Timestamp]
+    needs: [timestamp]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_version_to_be_published: ${{ steps.get_version_to_publish.outputs.CORE_SDK_VERSION_TO_BE_PUBLISHED }}
@@ -29,10 +31,25 @@ jobs:
           echo "CORE_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
-
+  extract_branch_name:
+    needs: [timestamp]
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.extract_branch_name.outputs.branch_name }}
+    steps:
+      - name: Extract branch name
+        id: extract_branch_name
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+          echo "BRANCH_NAME=${GITHUB_REF##*/}">> $GITHUB_OUTPUT
+          else
+          branch_name=${GITHUB_HEAD_REF}
+          echo "BRANCH_NAME=${GITHUB_HEAD_REF}>> $GITHUB_OUTPUT
+          fi
+          echo "Branch name is '${BRANCH_NAME}'"
   # Fetch the latest version from NPM
   fetch_latest_version:
-    needs: [Timestamp]
+    needs: [timestamp]
     runs-on: ubuntu-latest
     outputs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
