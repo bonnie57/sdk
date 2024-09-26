@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if version is valid for branch
-      run: |
+      - run: |
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
           REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
@@ -96,7 +96,7 @@ jobs:
             echo "Error: Invalid version '$REACT_SDK_VERSION' for branch 'main'"
             exit 1
             fi
-          fi            
+          fi
 
   # Fail the PR if the version to be published is the same as the latest version on NPM
   fail_if_version_is_same:
