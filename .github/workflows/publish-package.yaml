@@ -83,11 +83,11 @@ jobs:
                echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
               exit 1
             fi
-          else
-            if ! [[ "$SDK_VERSION" =~ ^1\.2 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.2 ]]; then
-            echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'main', only versions starting with '1.2' are allowed in main branch"
-            exit 1
-            fi
+          elif [[ "$BRANCH_NAME" == "main" ]]; then
+              if ! [[ "$SDK_VERSION" =~ ^1\.2 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.2 ]]; then
+                echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'main', only versions starting with '1.2' are allowed in main branch"
+                exit 1
+              fi
           fi
 
   # Fail the PR if the version to be published is the same as the latest version on NPM
