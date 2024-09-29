@@ -31,6 +31,7 @@ jobs:
           echo "CORE_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
           content=$(cat packages/react-sdk/package.json)
           echo "REACT_SDK_VERSION_TO_BE_PUBLISHED=$(echo $content | jq -r '.version')" >> $GITHUB_OUTPUT
+
   extract_branch_name:
     needs: [timestamp]
     runs-on: ubuntu-latest
@@ -46,6 +47,7 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           fi
           echo "Branch name is ${BRANCH_NAME}"
+          
   # Fetch the latest version from NPM
   fetch_latest_version:
     needs: [timestamp]
