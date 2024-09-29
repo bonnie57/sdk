@@ -46,8 +46,8 @@ jobs:
           else
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           fi
-          echo "Branch name is ${BRANCH_NAME}"
-          
+          echo "Branch name is $GITHUB_OUTPUT"
+
   # Fetch the latest version from NPM
   fetch_latest_version:
     needs: [timestamp]
@@ -80,12 +80,12 @@ jobs:
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           SDK_VERSION="${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
           REACT_SDK_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
-          if [[ "$BRANCH_NAME" == "v1.1" ]]; then
+          if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
             if ! [[ "$SDK_VERSION" =~ ^1\.1 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.1 ]]; then
                echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
               exit 1
             fi
-          elif [[ "$BRANCH_NAME" == "main" ]]; then
+          elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
               if ! [[ "$SDK_VERSION" =~ ^1\.2 ]] && ! [[ "$REACT_SDK_VERSION" =~ ^1\.2 ]]; then
                 echo "Error: Invalid version @story-protocol/core-sdk@$SDK_VERSION or @story-protocol/react-sdk@$REACT_SDK_VERSION for branch 'main', only versions starting with '1.2' are allowed in main branch"
                 exit 1
