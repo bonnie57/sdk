@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize]
     branches:
       - dev
+      - dev_v1.1
 
 jobs:
   Timestamp_PR_CREATED:
