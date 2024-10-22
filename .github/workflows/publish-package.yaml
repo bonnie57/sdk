@@ -85,6 +85,7 @@ jobs:
           get_latest_version() {
             prefix=$1
             package_name=$2
+            echo "Fetching latest version of $package_name on NPMJS with prefix $prefix"
             all_versions=$(npm view "$package_name" versions --json)
             echo "all_versions: $all_versions"
             if [[ "$all_versions" == "["* ]]; then
@@ -94,7 +95,7 @@ jobs:
               filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
               echo "filtered_versions2: $filtered_versions"
             fi
-            latest_version=$(echo "$filtered_versions" | tr '\n' ' ' | xargs -n1 | semver sort -r | head -n 1)    
+            latest_version=$(echo "$filtered_versions" | tr ' ' '\n' | semver sort -r | head -n 1)            echo "latest_version: $latest_version"   
             if [ -z "$latest_version" ]; then
               echo "$package_name package not found on NPMJS with prefix $prefix"
               latest_version="Not_Published"
