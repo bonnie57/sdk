@@ -1,13 +1,13 @@
 {
-  "name": "bonnie-sdk",
-  "version": "1.2.0-rc.2",
+  "name": "bonni-sdk",
+  "version": "1.2.0-rc.1",
   "description": "Story Protocol Core SDK",
-  "main": "dist/bonnie-sdk.cjs.js",
-  "module": "dist/bonnie-sdk.esm.js",
+  "main": "dist/bonni-sdk.cjs.js",
+  "module": "dist/bonni-sdk.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/bonnie-sdk.esm.js",
-      "default": "./dist/bonnie-sdk.cjs.js"
+      "module": "./dist/bonni-sdk.esm.js",
+      "default": "./dist/bonni-sdk.cjs.js"
     },
     "./package.json": "./package.json"
   },
