@@ -86,13 +86,13 @@ jobs:
             all_versions=$(npm view "$package_name" versions --json)
             echo "all_versions: $all_versions"
             if [[ "$all_versions" == "["* ]]; then
-              filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")|join(\" \")")
+              filtered_versions=$(echo "$all_versions" | jq -r "[.[] | select(startswith(\"$prefix\"))]")
               echo "filtered_versions1: $filtered_versions"
             else
-              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")|join(\" \")")
+              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
               echo "filtered_versions2: $filtered_versions"
             fi
-            latest_version=$(echo "$filtered_versions" | jq -r '.[-1]') 
+            latest_version=$(echo "$filtered_versions" | jq -r '.[-1]')
             if [ -z "$latest_version" ]; then
               echo "$package_name package not found on NPMJS with prefix $prefix"
               latest_version="Not_Published"
