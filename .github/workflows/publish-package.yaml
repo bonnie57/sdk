@@ -36,7 +36,7 @@ jobs:
     needs: [Timestamp]
     runs-on: ubuntu-latest
     outputs:
-      branch_name: ${{ steps.extract_branch_name.outputs.branch_name }}
+      branch_name: ${{ steps.extract_branch_name.outputs.BRANCH_NAME }}
     steps:
       - name: Extract branch name
         id: extract_branch_name
@@ -83,6 +83,7 @@ jobs:
             prefix=$1
             package_name=$2
             variable_key=$3
+            echo "$variable_key"
             all_versions=$(npm view "$package_name" versions --json)
             if [[ "$all_versions" == "["* ]]; then
               filtered_versions=$(echo "$all_versions" | jq -r "[.[] | select(startswith(\"$prefix\"))]")
