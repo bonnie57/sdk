@@ -83,9 +83,7 @@ jobs:
             prefix=$1
             package_name=$2
             variable_key=$3
-            echo "Fetching latest version of $package_name on NPMJS with prefix $prefix"
             all_versions=$(npm view "$package_name" versions --json)
-            echo "all_versions: $all_versions"
             if [[ "$all_versions" == "["* ]]; then
               filtered_versions=$(echo "$all_versions" | jq -r "[.[] | select(startswith(\"$prefix\"))]")
               echo "filtered_versions1: $filtered_versions"
@@ -98,7 +96,7 @@ jobs:
               latest_version="Not_Published"
             fi
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
-            echo "$package_name=$latest_version" >> $GITHUB_OUTPUT
+            echo "$variable_key=$latest_version" >> $GITHUB_OUTPUT    
           }
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
