@@ -1,13 +1,13 @@
 {
-  "name": "@Bonnie/react-sdk",
-  "version": "1.2.0-rc.0",
+  "name": "bonnie-react-sdk",
+  "version": "1.2.0-rc.1",
   "description": "The Story Protocol React SDK",
-  "main": "dist/Bonnie-react-sdk.cjs.js",
-  "module": "dist/Bonnie-react-sdk.esm.js",
+  "main": "dist/bonnie-react-sdk.cjs.js",
+  "module": "dist/bonnie-react-sdk.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/Bonnie-react-sdk.esm.js",
-      "default": "./dist/Bonnie-react-sdk.cjs.js"
+      "module": "./dist/bonnie-react-sdk.esm.js",
+      "default": "./dist/bonnie-react-sdk.cjs.js"
     },
     "./package.json": "./package.json"
   },
