@@ -21,7 +21,7 @@ export class IPAccountClient {
     this.rpcClient = rpcClient;
   }
 
-  /** Executes a transaction from the IP Account.
+  /** Executes a transaction from the IP Accountw.
    * @param request - The request object containing necessary data to execute IP Account a transaction.
    *   @param request.ipId The Ip Id to get ip account.
    *   @param request.to The recipient of the transaction.
