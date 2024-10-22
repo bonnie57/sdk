@@ -114,7 +114,6 @@ jobs:
     steps:
       - name: Fail if version is the same
         run: |
-          echo "sdk: ${{ needs.fetch_latest_version.outputs.core_sdk_version_to_be_published }} react: ${{ needs.fetch_latest_version.outputs.react_sdk_version_to_be_published }}"
           if [ "${{ needs.fetch_latest_version.outputs.core_sdk_latest_version }}" == "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" ]; then
             echo "The core-sdk version to be published is the same as the latest version on NPM. "
           fi
