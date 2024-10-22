@@ -67,7 +67,7 @@ export class GroupClient {
   /** Registers a Group IPA.
    * @param request - The request object containing necessary data to register group.
    *   @param request.groupPool The address specifying how royalty will be split amongst the pool of IPs in the group.
-   *   @param request.txOptions [Optional] This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
+   *   @param request.txOptions [Optio1nal] This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns A Promise that resolves to a transaction hash, and if encodedTxDataOnly is true, includes encoded transaction data, and if waitForTransaction is true, includes group id.
    * @emits PGroupRegistered (groupId, groupPool);
    */
