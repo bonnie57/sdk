@@ -82,6 +82,7 @@ jobs:
           get_latest_version() {
             prefix=$1
             package_name=$2
+            variable_key=$3
             echo "Fetching latest version of $package_name on NPMJS with prefix $prefix"
             all_versions=$(npm view "$package_name" versions --json)
             echo "all_versions: $all_versions"
@@ -97,15 +98,15 @@ jobs:
               latest_version="Not_Published"
             fi
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
-            echo "${package_name^^}_LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
+            echo "$package_name=$latest_version" >> $GITHUB_OUTPUT
           }
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
-            get_latest_version "1.1" "bonni-sdk"
-            get_latest_version "1.1" "bonnie-react-sdk"
+            get_latest_version "1.1" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "1.1" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
           elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
-            get_latest_version "1.2" "bonni-sdk"
-            get_latest_version "1.2" "bonnie-react-sdk"
+            get_latest_version "1.2" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "1.2" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
           fi
   # Fail the PR if the version to be published is the same as the latest version on NPM
   fail_if_version_is_same:
@@ -114,6 +115,7 @@ jobs:
     steps:
       - name: Fail if version is the same
         run: |
+          echo "sdk: ${{ needs.fetch_latest_version.outputs.core_sdk_version_to_be_published }} react: ${{ needs.fetch_latest_version.outputs.react_sdk_version_to_be_published }}"
           if [ "${{ needs.fetch_latest_version.outputs.core_sdk_latest_version }}" == "${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}" ]; then
             echo "The core-sdk version to be published is the same as the latest version on NPM. "
           fi
