@@ -76,9 +76,6 @@ jobs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
       react_sdk_latest_version: ${{ steps.get_latest_version.outputs.REACT_SDK_LATEST_VERSION }}
     steps:
-      - name: Install semver
-        run: npm install -g semver
-
       - name: Get latest package version
         id: get_latest_version
         run: |
@@ -89,13 +86,13 @@ jobs:
             all_versions=$(npm view "$package_name" versions --json)
             echo "all_versions: $all_versions"
             if [[ "$all_versions" == "["* ]]; then
-              filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
+              filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")|join(\" \")")
               echo "filtered_versions1: $filtered_versions"
             else
-              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
+              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")|join(\" \")")
               echo "filtered_versions2: $filtered_versions"
             fi
-            latest_version=$(echo "$filtered_versions" | tr ' ' '\n' | xargs -n1 | semver sort -r | head -n 1)
+            latest_version=$(echo "$filtered_versions" | jq -r '.[-1]') 
             if [ -z "$latest_version" ]; then
               echo "$package_name package not found on NPMJS with prefix $prefix"
               latest_version="Not_Published"
