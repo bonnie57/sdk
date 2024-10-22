@@ -86,6 +86,7 @@ jobs:
             prefix=$1
             package_name=$2
             all_versions=$(npm view "$package_name" versions --json)
+            echo "all_versions: $all_versions"
             if [[ "$all_versions" == "["* ]]; then
               filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
               echo "filtered_versions1: $filtered_versions"
