@@ -47,28 +47,6 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           fi
 
-  # Fetch the latest version from NPM
-  fetch_latest_version:
-    needs: [Timestamp]
-    runs-on: ubuntu-latest
-    outputs:
-      core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
-      react_sdk_latest_version: ${{ steps.get_latest_version.outputs.REACT_SDK_LATEST_VERSION }}
-    steps:
-      - name: Get latest package version
-        id: get_latest_version
-        run: |
-          CORE_SDK_LATEST_VERSION=$(npm view @story-protocol/core-sdk version --silent)
-          REACT_SDK_LATEST_VERSION=$(npm view @story-protocol/react-sdk version --silent || true)
-          if [ -z "$REACT_SDK_LATEST_VERSION" ]; then
-            echo "@story-protocol/react-sdk package not found on NPMJS"
-            REACT_SDK_LATEST_VERSION="Not_Published"
-          fi
-          echo "Latest version of @story-protocol/core-sdk on NPMJS is $CORE_SDK_LATEST_VERSION"
-          echo "CORE_SDK_LATEST_VERSION=$CORE_SDK_LATEST_VERSION" >> $GITHUB_OUTPUT
-          echo "Latest version of @story-protocol/react-sdk on NPMJS is $REACT_SDK_LATEST_VERSION"
-          echo "REACT_SDK_LATEST_VERSION=$REACT_SDK_LATEST_VERSION" >> $GITHUB_OUTPUT
-
   check_if_version_is_valid_for_branch:
     needs: [extract_branch_name, print_version_to_publish]
     runs-on: ubuntu-latest
@@ -90,7 +68,39 @@ jobs:
                 exit 1
               fi
           fi
+  # Fetch the latest version from NPM
+  fetch_latest_version:
+    needs: [Timestamp, extract_branch_name]
+    runs-on: ubuntu-latest
+    outputs:
+      core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
+      react_sdk_latest_version: ${{ steps.get_latest_version.outputs.REACT_SDK_LATEST_VERSION }}
+    steps:
+      - name: Get latest package version
+        id: get_latest_version
+        run: |
+          get_latest_version() {
+            prefix=$1
+            package_name=$2
+            all_versions=$(npm view "$package_name" versions --json)
+            filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
+            latest_version=$(echo "$filtered_versions" | tr ' ' '\n' | semver sort -r | head -n 1)
+            if [ -z "$latest_version" ]; then
+              echo "$package_name package not found on NPMJS with prefix $prefix"
+              latest_version="Not_Published"
+            fi
+            echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
+            echo "${package_name^^}_LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
+          }
 
+          BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
+          if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
+            get_latest_version "1.1" "@story-protocol/core-sdk"
+            get_latest_version "1.1" "@story-protocol/react-sdk"
+          elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
+            get_latest_version "1.2" "@story-protocol/core-sdk"
+            get_latest_version "1.2" "@story-protocol/react-sdk"
+          fi
   # Fail the PR if the version to be published is the same as the latest version on NPM
   fail_if_version_is_same:
     needs: [print_version_to_publish, fetch_latest_version]
