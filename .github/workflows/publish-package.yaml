@@ -86,7 +86,11 @@ jobs:
             prefix=$1
             package_name=$2
             all_versions=$(npm view "$package_name" versions --json)
-            filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
+            if [[ "$all_versions" == "["* ]]; then
+              filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
+            else
+              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
+            fi
             latest_version=$(echo "$filtered_versions" | tr ' ' '\n' | semver sort -r | head -n 1)
             if [ -z "$latest_version" ]; then
               echo "$package_name package not found on NPMJS with prefix $prefix"
@@ -95,7 +99,6 @@ jobs:
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
             echo "${package_name^^}_LATEST_VERSION=$latest_version" >> $GITHUB_OUTPUT
           }
-
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
             get_latest_version "1.1" "bonnie-sdk"
