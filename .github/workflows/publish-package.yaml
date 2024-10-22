@@ -76,6 +76,9 @@ jobs:
       core_sdk_latest_version: ${{ steps.get_latest_version.outputs.CORE_SDK_LATEST_VERSION }}
       react_sdk_latest_version: ${{ steps.get_latest_version.outputs.REACT_SDK_LATEST_VERSION }}
     steps:
+      - name: Install semver
+        run: npm install -g semver
+
       - name: Get latest package version
         id: get_latest_version
         run: |
