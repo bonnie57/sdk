@@ -88,8 +88,10 @@ jobs:
             all_versions=$(npm view "$package_name" versions --json)
             if [[ "$all_versions" == "["* ]]; then
               filtered_versions=$(echo "$all_versions" | jq -r ".[] | select(startswith(\"$prefix\"))")
+              echo "filtered_versions1: $filtered_versions"
             else
               filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
+              echo "filtered_versions2: $filtered_versions"
             fi
             latest_version=$(echo "$filtered_versions" | tr ' ' '\n' | semver sort -r | head -n 1)
             if [ -z "$latest_version" ]; then
