@@ -80,10 +80,10 @@ jobs:
 
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
-            get_latest_version "1.1" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "1.1" "bonn-sdk" "CORE_SDK_LATEST_VERSION"
             get_latest_version "1.1" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
           elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
-            get_latest_version "1.2" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "1.2" "bonn-sdk" "CORE_SDK_LATEST_VERSION"
             get_latest_version "1.2" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
           fi
   # Fail the PR if the version to be published is the same as the latest version on NPM
@@ -102,7 +102,7 @@ jobs:
           REACT_SDK_PUBLISH_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
           CORE_SDK_LATEST_VERSION="${{ needs.fetch_latest_version.outputs.core_sdk_latest_version }}"
           REACT_SDK_LATEST_VERSION="${{ needs.fetch_latest_version.outputs.react_sdk_latest_version }}"
-          
+
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
             if ! [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.1 ]] && ! [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.1 ]]; then
               echo "Error: Invalid version @story-protocol/core-sdk@$CORE_SDK_PUBLISH_VERSION and @story-protocol/react-sdk@$REACT_SDK_PUBLISH_VERSION for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
