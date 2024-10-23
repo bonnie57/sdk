@@ -77,7 +77,7 @@ jobs:
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
             echo "$variable_key=$latest_version" >> $GITHUB_OUTPUT    
           }
-          
+
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
             get_latest_version "1.1" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
@@ -102,22 +102,27 @@ jobs:
           REACT_SDK_PUBLISH_VERSION="${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
           CORE_SDK_LATEST_VERSION="${{ needs.fetch_latest_version.outputs.core_sdk_latest_version }}"
           REACT_SDK_LATEST_VERSION="${{ needs.fetch_latest_version.outputs.react_sdk_latest_version }}"
+          
           if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
             if ! [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.1 ]] && ! [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.1 ]]; then
               echo "Error: Invalid version @story-protocol/core-sdk@$CORE_SDK_PUBLISH_VERSION and @story-protocol/react-sdk@$REACT_SDK_PUBLISH_VERSION for branch 'v1.1', only versions starting with '1.1' are allowed in v1.1 branch"
               exit 1
-            elif [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.1 && "$CORE_SDK_PUBLISH_VERSION" != "$CORE_SDK_LATEST_VERSION" ]]; then
+            fi
+            if [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.1 && "$CORE_SDK_PUBLISH_VERSION" != "$CORE_SDK_LATEST_VERSION" ]]; then
               echo "IS_PUBLISH_CORE_SDK=true" >> $GITHUB_OUTPUT
-            elif [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.1 && "$REACT_SDK_PUBLISH_VERSION" != "$REACT_SDK_LATEST_VERSION" ]]; then
+            fi
+            if [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.1 && "$REACT_SDK_PUBLISH_VERSION" != "$REACT_SDK_LATEST_VERSION" ]]; then
               echo "IS_PUBLISH_REACT_SDK=true" >> $GITHUB_OUTPUT
             fi
           elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
             if ! [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.2 ]] && ! [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.2 ]]; then
               echo "Error: Invalid version @story-protocol/core-sdk@$CORE_SDK_PUBLISH_VERSION and @story-protocol/react-sdk@$REACT_SDK_PUBLISH_VERSION for branch 'main', only versions starting with '1.2' are allowed in main branch"
               exit 1
-            elif [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.2 && "$CORE_SDK_PUBLISH_VERSION" != "$CORE_SDK_LATEST_VERSION" ]]; then
+            fi
+            if [[ "$CORE_SDK_PUBLISH_VERSION" =~ ^1\.2 && "$CORE_SDK_PUBLISH_VERSION" != "$CORE_SDK_LATEST_VERSION" ]]; then
               echo "IS_PUBLISH_CORE_SDK=true" >> $GITHUB_OUTPUT
-            elif [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.2 && "$REACT_SDK_PUBLISH_VERSION" != "$REACT_SDK_LATEST_VERSION" ]]; then
+            fi
+            if [[ "$REACT_SDK_PUBLISH_VERSION" =~ ^1\.2 && "$REACT_SDK_PUBLISH_VERSION" != "$REACT_SDK_LATEST_VERSION" ]]; then
               echo "IS_PUBLISH_REACT_SDK=true" >> $GITHUB_OUTPUT
             fi
           fi
