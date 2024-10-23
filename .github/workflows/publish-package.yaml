@@ -45,6 +45,7 @@ jobs:
           echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
           else
           echo "branchName: ${GITHUB_HEAD_REF}"
+          echo "base: ${GITHUB_BASE_REF}"
           echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
           fi
 
