@@ -90,20 +90,11 @@ jobs:
               filtered_versions=$(echo "$all_versions" | jq -r "[.[] | select(startswith(\"$prefix\"))]")
               echo "filtered_versions1: $filtered_versions"
             else
-<<<<<<< Updated upstream
               filtered_versions=$(echo "[$all_versions]" | jq -r "[.[] | select(startswith(\"$prefix\"))]") 
               echo "filtered_versions2: $filtered_versions"
             fi
             latest_version=$(echo "$filtered_versions" | jq -r '.[-1]')
             if [ "$latest_version" == "null" ]; then
-=======
-              filtered_versions=$(echo "$all_versions" | jq -r "select(startswith(\"$prefix\"))")
-              echo "filtered_versions2: $filtered_versions"
-            fi
-            latest_version=$(echo "$filtered_versions" | jq -r '.[-1]')
-            if [ -z "$latest_version" ]; then
-              echo "$package_name package not found on NPMJS with prefix $prefix"
->>>>>>> Stashed changes
               latest_version="Not_Published"
             fi
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
