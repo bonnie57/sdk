@@ -79,12 +79,12 @@ jobs:
           }
 
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
-          if [[ "$BRANCH_NAME" == "v1.1" || "$BRANCH_NAME" == "dev_v1.1" ]]; then
-            get_latest_version "1.1" "bonn-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "1.1" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
-          elif [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" == "dev" ]]; then
-            get_latest_version "1.2" "bonn-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "1.2" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
+          if [[ "$BRANCH_NAME" == "v${{ env.VERSION_1_1 }}" || "$BRANCH_NAME" == "dev_v${{ env.VERSION_1_1 }}" ]]; then
+            get_latest_version "${{ env.VERSION_1_1 }}" "bon-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_1 }}" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
+          elif [[ "$BRANCH_NAME" == "${{ env.MAIN }}" || "$BRANCH_NAME" == ${{ env.DEV }} ]]; then        
+            get_latest_version "${{ env.VERSION_1_2 }}" "bon-sdk" "CORE_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_2 }}" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
           fi
   # Fail the PR if the version to be published is the same as the latest version on NPM
   check_if_version_is_valid_for_branch:
