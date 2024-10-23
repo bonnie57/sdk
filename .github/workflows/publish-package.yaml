@@ -44,9 +44,7 @@ jobs:
           if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
           echo "BRANCH_NAME=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
           else
-          echo "branchName: ${GITHUB_HEAD_REF}"
-          echo "base: ${GITHUB_BASE_REF}"
-          echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_OUTPUT
+          echo "BRANCH_NAME=${GITHUB_BASE_REF}" >> $GITHUB_OUTPUT
           fi
 
   check_if_version_is_valid_for_branch:
