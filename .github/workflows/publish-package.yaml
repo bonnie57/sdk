@@ -85,10 +85,10 @@ jobs:
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v${{ env.VERSION_1_1 }}" || "$BRANCH_NAME" == "dev_v${{ env.VERSION_1_1 }}" ]]; then
             get_latest_version "${{ env.VERSION_1_1 }}" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "${{ env.VERSION_1_1 }}" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_1 }}" "bonni-react-sdk" "REACT_SDK_LATEST_VERSION"
           elif [[ "$BRANCH_NAME" == "${{ env.MAIN }}" || "$BRANCH_NAME" == ${{ env.DEV }} ]]; then        
             get_latest_version "${{ env.VERSION_1_2 }}" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "${{ env.VERSION_1_2 }}" "bonnie-react-sdk" "REACT_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_2 }}" "bonni-react-sdk" "REACT_SDK_LATEST_VERSION"
           fi
   # Fail if the version including react-sdk and core-sdk does not match the branch strategy
   check_if_version_is_valid_for_branch:
