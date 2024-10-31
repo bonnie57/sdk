@@ -26,6 +26,9 @@ importers:
       axios:
         specifier: ^1.5.1
         version: 1.6.8
+      bonni-sdk:
+        specifier: 1.1.5
+        version: 1.1.5(typescript@5.4.5)
       dotenv:
         specifier: ^16.3.1
         version: 16.4.5
@@ -5419,6 +5422,21 @@ packages:
   /bn.js@5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
     dev: true
+
+  /bonni-sdk@1.1.5(typescript@5.4.5):
+    resolution: {integrity: sha512-BxTkwesi4mA4d9Xrxh4+iawwZ/mpefoJsx1FHASGssz9cz2iDmlnyylUnKE9F2t6gonLMPL3DhN+BGI/Tf0D1w==}
+    dependencies:
+      abitype: 0.10.3(typescript@5.4.5)
+      axios: 1.6.8
+      dotenv: 16.4.5
+      viem: 2.9.16(typescript@5.4.5)(zod@3.23.8)
+    transitivePeerDependencies:
+      - bufferutil
+      - debug
+      - typescript
+      - utf-8-validate
+      - zod
+    dev: false
 
   /bowser@2.11.0:
     resolution: {integrity: sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==}

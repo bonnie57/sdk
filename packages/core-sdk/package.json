@@ -1,13 +1,13 @@
 {
-  "name": "@story-protocol/core-sdk",
-  "version": "1.2.0-rc.0",
+  "name": "bonni-sdk",
+  "version": "1.2.0-rc.12",
   "description": "Story Protocol Core SDK",
-  "main": "dist/story-protocol-core-sdk.cjs.js",
-  "module": "dist/story-protocol-core-sdk.esm.js",
+  "main": "dist/bonni-sdk.cjs.js",
+  "module": "dist/bonni-sdk.esm.js",
   "exports": {
     ".": {
-      "module": "./dist/story-protocol-core-sdk.esm.js",
-      "default": "./dist/story-protocol-core-sdk.cjs.js"
+      "module": "./dist/bonni-sdk.esm.js",
+      "default": "./dist/bonni-sdk.cjs.js"
     },
     "./package.json": "./package.json"
   },
@@ -31,6 +31,7 @@
   "dependencies": {
     "abitype": "^0.10.2",
     "axios": "^1.5.1",
+    "bonni-sdk": "1.1.5",
     "dotenv": "^16.3.1",
     "viem": "^2.8.12"
   },
