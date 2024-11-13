@@ -167,7 +167,6 @@ jobs:
       ]
     # Skip this job if the core-sdk and react-sdk don't need to be published
     # and the event triggering the workflow is a push
-    if: ${{ (needs.check_if_version_is_valid_for_branch.outputs.is_publish_core_sdk == 'true' || needs.check_if_version_is_valid_for_branch.outputs.is_publish_react_sdk == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     environment: "beta-sepolia"
     env:
