@@ -222,7 +222,6 @@ jobs:
         run: pnpm build
 
       - name: Publish core-sdk package to npm
-        if: ${{ github.event_name == 'push' && needs.check_if_version_is_valid_for_branch.outputs.IS_PUBLISH_CORE_SDK == 'true'}}
         run: |
           cd packages/core-sdk
           npm publish
@@ -230,7 +229,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish react-sdk package to npm
-        if: ${{ github.event_name == 'push' && needs.check_if_version_is_valid_for_branch.outputs.IS_PUBLISH_REACT_SDK == 'true'}}
         run: |
           cd packages/react-sdk
           npm publish
