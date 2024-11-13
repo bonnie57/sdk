@@ -227,13 +227,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish react-sdk package to npm
-        run: |
-          cd packages/react-sdk
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
   create-release-core-sdk:
     needs:
       [
