@@ -47,9 +47,6 @@ jobs:
         with:
           fromTag: "core-sdk@1.2.10"
           toTag: "core-sdk@1.2.11"
-          owner: "mikepenz"
-          repo: "release-changelog-builder-action"
-          token: ${{ secrets.GITHUB_TOKEN }}
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}",
@@ -73,36 +70,6 @@ jobs:
                 "order": "ASC",
                 "on_property": "mergedAt"
               },
-              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
-              "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}}",
-              "empty_template": "- no changes",
-              "label_extractor": [
-                {
-                    "pattern": "(.) (.+)",
-                    "target": "$1",
-                    "flags": "gu"
-                },
-                {
-                    "pattern": "\\[Issue\\]",
-                    "on_property": "title",
-                    "method": "match"
-                }
-                ],
-              "duplicate_filter": {
-                "pattern": "\\[ABC-....\\]",
-                "on_property": "title",
-                "method": "match"
-              },
-              "ignore_labels": [
-                "ignore"
-            ],
-              "reference": {
-                "pattern": ".*\\ \\#(.).*",
-                "on_property": "body",
-                "method": "replace",
-                "target": "$1"
-                },
-
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
