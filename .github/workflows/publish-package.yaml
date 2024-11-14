@@ -64,7 +64,7 @@ jobs:
             echo "Latest version of $package_name on NPMJS with prefix $prefix is $latest_version"
             echo "$variable_key=$latest_version" >> $GITHUB_OUTPUT    
           }
-          get_latest_version "${{ env.VERSION_1_2 }}" "bonni-sdk" "CORE_SDK_LATEST_VERSION"
+          get_latest_version "${{ env.VERSION_1_2 }}" "bonnie57" "CORE_SDK_LATEST_VERSION"
   build-test-publish:
     needs: [print_version_to_publish, fetch_latest_version]
     # Skip this job if the core-sdk and react-sdk don't need to be published
