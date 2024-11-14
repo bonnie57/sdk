@@ -47,28 +47,32 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@a57c1b7c90e56d9c8b26a6ed5d1eed159369e117
         with:
-          #   fromTag: "core-sdk@1.2.10"
-          #   toTag: "core-sdk@1.2.11"
           toTag: ${{ inputs.tag_name}}
           fromTag: ${{ env.fromTag }}
+          mode: "COMMIT"
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}",
               "categories": [
                 {
-                  "title": "## 🚀 Features",
-                  "labels": ["feature"]
+                    "title": "## Feature",
+                    "labels": ["feat", "feature"]
                 },
                 {
-                  "title": "## 🐛 Fixes",
-                  "labels": ["fix"]
+                    "title": "## Fix",
+                    "labels": ["fix", "bug"]
                 },
                 {
-                  "key": "tests",
-                  "title": "## 🧪 Tests",
-                  "labels": ["test"]
-                },
+                    "title": "## Other",
+                    "labels": []
+                }
               ],
+              "label_extractor": [
+                {
+                  "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+                  "target": "$1"
+                }
+              ]
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
