@@ -33,11 +33,14 @@ jobs:
         id: tag_and_push
         run: |
           TAG_NAME=${{ inputs.tag_name}}
+          From_TAG=${{ steps.get_previous_tag.outputs.fromTag }}
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
           git tag -a $TAG_NAME -m "Release $TAG_NAME"
           git push origin $TAG_NAME
           echo "toTag=$TAG_NAME" >> $GITHUB_ENV
+          echo "The tag $TAG_NAME has been created and pushed to the repository"
+          echo "The tag $From_TAG has been created and pushed to the repository"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -45,15 +48,17 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@a57c1b7c90e56d9c8b26a6ed5d1eed159369e117
         with:
-          fromTag: "core-sdk@1.2.10"
-          toTag: "core-sdk@1.2.11"
+          #   fromTag: "core-sdk@1.2.10"
+          #   toTag: "core-sdk@1.2.11"
+          toTag: ${{ inputs.tag_name}}
+          fromTag: ${{ steps.get_previous_tag.outputs.fromTag }}
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}",
               "categories": [
                 {
                   "title": "## 🚀 Features",
-                  "labels": ["feature","feat"]
+                  "labels": ["feature"]
                 },
                 {
                   "title": "## 🐛 Fixes",
@@ -65,11 +70,6 @@ jobs:
                   "labels": ["test"]
                 },
               ],
-              "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}}",
-              "sort": {
-                "order": "ASC",
-                "on_property": "mergedAt"
-              },
             }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
