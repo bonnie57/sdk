@@ -1,10 +1,4 @@
-import {
-  WalletClient,
-  encodeAbiParameters,
-  encodeFunctionData,
-  keccak256,
-  toFunctionSelector,
-} from "viem";
+import { encodeAbiParameters, encodeFunctionData, keccak256, toFunctionSelector } from "viem";
 
 import { accessControllerAbi, accessControllerAddress, ipAccountImplAbi } from "../abi/generated";
 import { getAddress } from "./utils";
@@ -12,8 +6,6 @@ import { defaultFunctionSelector } from "../constants/common";
 import {
   PermissionSignatureRequest,
   PermissionSignatureResponse,
-  SignatureRequest,
-  SignatureResponse,
 } from "../types/resources/permission";
 
 /**
@@ -32,6 +24,12 @@ export const getPermissionSignature = async (
   param: PermissionSignatureRequest,
 ): Promise<PermissionSignatureResponse> => {
   const { ipId, deadline, state, wallet, chainId, permissions, permissionFunc } = param;
+  if (!wallet.signTypedData) {
+    throw new Error("The wallet client does not support signTypedData, please try again.");
+  }
+  if (!wallet.account) {
+    throw new Error("The wallet client does not have an account, please try again.");
+  }
   const permissionFunction = permissionFunc ? permissionFunc : "setPermission";
   const accessAddress =
     accessControllerAddress[Number(chainId) as keyof typeof accessControllerAddress];
@@ -57,51 +55,6 @@ export const getPermissionSignature = async (
             })),
           ],
   });
-  return await getSignature({
-    state,
-    to: accessAddress,
-    encodeData: data,
-    wallet,
-    verifyingContract: ipId,
-    deadline,
-    chainId,
-  });
-};
-
-export const getDeadline = (unixTimestamp: bigint, deadline?: bigint | number | string): bigint => {
-  if (deadline && (isNaN(Number(deadline)) || BigInt(deadline) < 0n)) {
-    throw new Error("Invalid deadline value.");
-  }
-  return deadline ? unixTimestamp + BigInt(deadline) : unixTimestamp + 1000n;
-};
-
-/**
- * Get the signature.
- * @param param - The parameter object containing necessary data to get the signature.
- * @param param.state - The IP Account's state.
- * @param param.to - The recipient address.
- * @param param.encodeData - The encoded data.
- * @param param.wallet - The wallet client.
- * @param param.verifyingContract - The verifying contract.
- * @param param.deadline - The deadline.
- * @param param.chainId - The chain ID.
- * @returns A Promise that resolves to the signature.
- */
-export const getSignature = async ({
-  state,
-  to,
-  encodeData,
-  wallet,
-  verifyingContract,
-  deadline,
-  chainId,
-}: SignatureRequest): Promise<SignatureResponse> => {
-  if (!(wallet as WalletClient).signTypedData) {
-    throw new Error("The wallet client does not support signTypedData, please try again.");
-  }
-  if (!wallet.account) {
-    throw new Error("The wallet client does not have an account, please try again.");
-  }
   const nonce = keccak256(
     encodeAbiParameters(
       [
@@ -113,18 +66,19 @@ export const getSignature = async ({
         encodeFunctionData({
           abi: ipAccountImplAbi,
           functionName: "execute",
-          args: [to, 0n, encodeData],
+          args: [accessAddress, 0n, data],
         }),
       ],
     ),
   );
-  return await (wallet as WalletClient).signTypedData({
+
+  return await wallet.signTypedData({
     account: wallet.account,
     domain: {
       name: "Story Protocol IP Account",
       version: "1",
       chainId: Number(chainId),
-      verifyingContract,
+      verifyingContract: getAddress(ipId, "ipId"),
     },
     types: {
       Execute: [
@@ -137,11 +91,22 @@ export const getSignature = async ({
     },
     primaryType: "Execute",
     message: {
-      to,
+      to: getAddress(
+        accessControllerAddress[Number(chainId) as keyof typeof accessControllerAddress],
+        "accessControllerAddress",
+      ),
       value: BigInt(0),
-      data: encodeData,
+      data,
       nonce,
       deadline: BigInt(deadline),
     },
   });
+};
+
+export const getDeadline = (deadline?: bigint | number | string): bigint => {
+  if (deadline && (isNaN(Number(deadline)) || BigInt(deadline) < 0n)) {
+    throw new Error("Invalid deadline value.");
+  }
+  const timestamp = BigInt(Date.now());
+  return deadline ? timestamp + BigInt(deadline) : timestamp + 1000n;
 };
