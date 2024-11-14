@@ -62,21 +62,6 @@ jobs:
                 "title": "## 🧪 Tests",
                 "labels": ["test"]
               },
-              {
-                "title": "## 🧪 Tests and some 🪄 Magic",
-                "labels": ["test", "magic"],
-                "exclude_labels": ["no-magic"],
-                "exhaustive": true,
-                "exhaustive_rules": "false",
-                "empty_content": "- no matching PRs",
-                "rules": [
-                  {
-                    "pattern": "open",
-                    "on_property": "status",
-                    "flags": "gu"
-                  }
-                ]
-              }
             ],
             "ignore_labels": [
               "ignore"
@@ -139,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: mikepenz/action-gh-release@a74c6b72af54cfa997e81df42d94703d6313a2d0 #softprops/action-gh-release
+        uses: mikepenz/action-gh-release@v1 #softprops/action-gh-release
         with:
           tag_name: ${{ inputs.tag_name }}
           body: ${{ steps.build_changelog.outputs.changelog }}
