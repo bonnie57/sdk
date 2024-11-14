@@ -45,7 +45,6 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@a57c1b7c90e56d9c8b26a6ed5d1eed159369e117
         with:
-          mode: "COMMIT"
           fromTag: ${{ steps.get_previous_tag.outputs.fromTag }}
           toTag: ${{ inputs.tag_name}}
           configurationJson: |
@@ -80,3 +79,4 @@ jobs:
         with:
           tag_name: ${{ inputs.tag_name }}
           body: ${{ steps.build_changelog.outputs.changelog }}
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-b') || contains(github.ref, '-a') }}
