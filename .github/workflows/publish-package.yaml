@@ -67,6 +67,7 @@ jobs:
           get_latest_version "${{ env.VERSION_1_2 }}" "bonnie57" "CORE_SDK_LATEST_VERSION"
   build-test-publish:
     needs: [print_version_to_publish, fetch_latest_version]
+    if: ${{ needs.check_if_version_is_valid_for_branch.outputs.is_publish_core_sdk == 'true' && github.event_name == 'push' }}
     # Skip this job if the core-sdk and react-sdk don't need to be published
     # and the event triggering the workflow is a push
     runs-on: ubuntu-latest
@@ -104,6 +105,7 @@ jobs:
         run: pnpm build
 
       - name: Publish core-sdk package to npm
+        if: ${{ github.event_name == 'push' }}
         run: |
           cd packages/core-sdk
           npm publish
