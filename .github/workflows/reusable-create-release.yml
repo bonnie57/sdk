@@ -45,8 +45,8 @@ jobs:
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@a57c1b7c90e56d9c8b26a6ed5d1eed159369e117
         with:
-          fromTag: "core-sdk@0.0.4"
-          toTag: "core-sdk@0.0.5"
+          fromTag: "core-sdk@1.2.10"
+          toTag: "core-sdk@1.2.11"
           owner: "mikepenz"
           repo: "release-changelog-builder-action"
           token: ${{ secrets.GITHUB_TOKEN }}
