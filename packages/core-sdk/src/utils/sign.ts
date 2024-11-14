@@ -18,7 +18,7 @@ import {
 
 /**
  * Get the signature for setting permissions.
- * @param param - The parameter object containing necessary data to get the signature.
+ * @param param - The parameter odbject containing necessary data to get the signature.
  * @param param.ipId - The IP ID.
  * @param param.deadline - The deadline.
  * @param param.nonce - The nonce.
