@@ -227,8 +227,14 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   create-release-core-sdk:
+    needs:
+      [
+        build-test-publish,
+        print_version_to_publish,
+        check_if_version_is_valid_for_branch,
+      ]
     # Skip this job if core-sdk doesn't need to be published
     # and the event triggering the workflow is a push
     uses: ./.github/workflows/reusable-create-release.yml
     with:
-      tag_name: "core-sdk@1.2.0-rc.16"
+      tag_name: core-sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
