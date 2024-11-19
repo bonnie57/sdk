@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release:
-    if: startsWith(github.ref, 'refs/tags/')
+    # if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,6 +28,7 @@ jobs:
           LATEST_TAG=$(git tag --sort=creatordate | tail -n1)
           echo "The latest tag based on creation date is $LATEST_TAG"
           echo "fromTag=$LATEST_TAG" >> $GITHUB_ENV
+          echo $GITHUB_REF
 
       - name: Tag and Push
         id: tag_and_push
@@ -73,7 +74,7 @@ jobs:
       - name: Create Release
         uses: mikepenz/action-gh-release@v1
         with:
-            body: ${{steps.github_release.outputs.changelog}}
-            prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-b') || contains(github.ref, '-a') }}
+          body: ${{steps.github_release.outputs.changelog}}
+          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-b') || contains(github.ref, '-a') }}
         env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
