@@ -72,7 +72,7 @@ export class IPAccountClient {
    *   @param request.signer The signer of the transaction.
    *   @param request.deadline The deadline of the transaction signature.
    *   @param request.signature The signature of the transaction, EIP-712 encoded.
-   *   @param request.value [Optional] The amount of Ether to send.
+   *   @param request.value [Optisssonal] The amount of Ether to send.
    *   @param request.txOptions [Optional] This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns Tx hash for the transaction.
    */

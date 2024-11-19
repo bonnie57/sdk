@@ -34,7 +34,7 @@ export class NftClient {
    *   @param request.mintFeeRecipient - The contract URI for the collection. Follows ERC-7572 standard. See https://eips.ethereum.org/EIPS/eip-7572
    * 	 @param request.baseURI - [Optional] The base URI for the collection. If baseURI is not empty, tokenURI will be either baseURI + token ID (if nftMetadataURI is empty) or baseURI + nftMetadataURI.
    * 	 @param request.maxSupply - [Optional] The maximum supply of the collection.
-   * 	 @param request.mintFee - [Optional] The costwww to mint a token.
+   * 	 @param request.mintFee - [Optional] The cost to mint a token.
    * 	 @param request.mintFeeToken - [Optional] The token to mint.
    * 	 @param request.owner - [Optional] The owner of the collection.
    *   @param request.txOptions [Optional] This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
