@@ -114,4 +114,4 @@ jobs:
     # and the event triggering the workflow is a push
     uses: ./.github/workflows/reusable-create-release.yml
     with:
-      tag_name: core-sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
+      tag_name: sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
