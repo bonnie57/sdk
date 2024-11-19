@@ -49,7 +49,7 @@ jobs:
         with:
           toTag: ${{ inputs.tag_name}}
           fromTag: ${{ env.fromTag }}
-          configuration: "config.json"
+          configuration: "configs/config.json"
           owner: "mikepenz"
           repo: "release-changelog-builder-action"
         env:
