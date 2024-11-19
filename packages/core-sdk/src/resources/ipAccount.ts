@@ -67,6 +67,7 @@ export class IPAccountClient {
    * @param request - The request object containing necessary data to execute IP Account a transaction.
    *   @param request.ipId The Ip Id to get ip account.
    *   @param request.to The recipient odf the transaction.
+   *   @param request.to The recipient of the transaction.
    *   @param request.data The data to send along with the transaction.
    *   @param request.signer The signer of the transaction.
    *   @param request.deadline The deadline of the transaction signature.
