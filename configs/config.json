@@ -1,27 +1,43 @@
 {
-  "categories": [
-    {
-      "title": "## 🚀 Features",
-      "labels": ["feature"]
-    },
-    {
-      "title": "## 🐛 Fixes",
-      "labels": ["fix"]
-    },
-    {
-      "title": "## 🧪 Tests",
-      "labels": ["test"]
-    },
-    {
-      "title": "## 💬 Other",
-      "labels": ["other"]
-    },
-    {
-      "title": "## 📦 Dependencies",
-      "labels": ["dependencies"]
-    }
-  ],
-  "template": "#{{CHANGELOG}}\n## Contributors:\n- #{{CONTRIBUTORS}}",
-  "max_pull_requests": 1000,
-  "max_back_track_time_days": 1000
+    "template": "#Changes: #{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+    "categories": [
+        {
+            "title": "## 🚀 Features",
+            "labels": [
+                "feat",
+                "feature",
+                "Feature"
+            ]
+        },
+        {
+            "title": "## 🐛 Fixes",
+            "labels": [
+                "fix",
+                "bug",
+                "Fix"
+            ]
+        },
+        {
+            "title": "## 🛠️ Chores",
+            "labels": [
+                "chore",
+                "Chore"
+            ]
+        },
+        {
+            "title": "## 🛠️ Dependencies",
+            "labels": [
+                "deps"
+            ]
+        }
+    ],
+    "label_extractor": [
+        {
+            "method": "regexr",
+            "pattern": "\\[(.+?)\\].+",
+            "target": "$1",
+            "on_property": "title"
+        }
+    ]
+}
 }
