@@ -50,9 +50,9 @@ jobs:
           toTag: ${{ inputs.tag_name}}
           fromTag: ${{ env.fromTag }}
           configuration: "configs/config.json"
-          # owner: "bonnie57"
-          # repo: "sdk"
-          # token: ${{ secrets.GITHUB_TOKEN }}
+          owner: "bonnie57"
+          repo: "sdk"
+          token: ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
