@@ -77,6 +77,5 @@
       "pattern": "api-(.+)",
       "flags": "gu"
     }
-  },
-  "base_branches": ["dev"]
+  }
 }
