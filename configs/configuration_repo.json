@@ -2,26 +2,32 @@
   "categories": [
     {
       "title": "## 🚀 Features",
-      "labels": ["feature"]
+      "labels": ["enhancement"]
     },
     {
       "title": "## 🐛 Fixes",
-      "labels": ["fix"]
+      "labels": ["bug"]
     },
     {
+      "key": "tests",
       "title": "## 🧪 Tests",
       "labels": ["test"]
     },
     {
+      "key": "Other",
       "title": "## 💬 Other",
-      "labels": ["other"]
+      "labels": ["documentation", "others"]
     },
     {
+      "key": "Dependencies",
       "title": "## 📦 Dependencies",
       "labels": ["dependencies"]
     }
   ],
-  "template": "#{{CHANGELOG}}\n## Contributors:\n- #{{CONTRIBUTORS}}",
-  "max_pull_requests": 1000,
-  "max_back_track_time_days": 1000
+  "ignore_labels": ["ignore"],
+  "sort": {
+    "order": "ASC",
+    "on_property": "mergedAt"
+  },
+  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>"
 }
