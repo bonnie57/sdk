@@ -14,14 +14,14 @@
       "labels": ["test"]
     },
     {
-      "key": "Other",
-      "title": "## 💬 Other",
-      "labels": ["documentation", "others"]
+      "key": "Others",
+      "title": "## 💬 Others",
+      "labels": ["documentation", "other"]
     },
     {
       "key": "Dependencies",
       "title": "## 📦 Dependencies",
-      "labels": ["dependencies"]
+      "labels": ["dependency"]
     }
   ],
   "ignore_labels": ["ignore"],
@@ -29,5 +29,5 @@
     "order": "ASC",
     "on_property": "mergedAt"
   },
-  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>"
+  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>- #{{CONTRIBUTORS}}"
 }
