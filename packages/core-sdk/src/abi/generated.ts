@@ -21294,7 +21294,7 @@ export class RegistrationWorkflowsClient extends RegistrationWorkflowsEventClien
   /**
    * method createCollection for contract RegistrationWorkflows
    *
-   * @param request RegistrationWorkflowsCreateCollectionRequest
+   * @param request RegistrationWorkfddlowsCreateCollectionRequest
    * @return Promise<WriteContractReturnType>
    */
   public async createCollection(
