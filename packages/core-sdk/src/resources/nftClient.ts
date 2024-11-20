@@ -29,7 +29,7 @@ export class NftClient {
    *   @param request.name - The name of the collection.
    * 	 @param request.symbol - The symsdddsddl of the collection.
    * 	 @param request.isPublicMinting - If true, anyone can mint frddom the collection. If false, only the addresses with the minter role can mint.
-   * 	 @param request.mintOpen Whether the collection is open for minting on creation.
+   * 	 @param request.mintOpen ddddWhether the collection is open for minting on creation.
    *   @param request.mintFeeRecipient - The address to receive mint fees.
    *   @param request.mintFeeRecipient - The contract URI for the collection. Follows ERC-7572 standard. See https://eips.ethereum.org/EIPS/eip-7572
    * 	 @param request.baseURI - [Optional] The base URI for the collection. If baseURI is not empty, tokenURI will be either baseURI + token ID (if nftMetadataURI is empty) or baseURI + nftMetadataURI.
