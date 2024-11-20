@@ -1,6 +1,6 @@
 {
   "name": "bonnie37",
-  "version": "1.2.27",
+  "version": "1.2.28",
   "main": "dist/bonnie37.cjs.js",
   "module": "dist/bonnie37.esm.js",
   "exports": {
