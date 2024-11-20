@@ -25,10 +25,10 @@
     }
   ],
   "ignore_labels": ["ignore"],
-  "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}} @${{AUTHOR}}",
+  "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}}",
   "sort": {
     "order": "ASC",
     "on_property": "mergedAt"
   },
-  "template": "#{{CHANGELOG}}\n## Contributors:\n- #{{CONTRIBUTORS}}"
+  "template": "#{{CHANGELOG}}"
 }
