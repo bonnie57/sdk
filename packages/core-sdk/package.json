@@ -1,6 +1,6 @@
 {
   "name": "bonnie37",
-  "version": "1.2.24",
+  "version": "1.2.25",
   "description": "Core SDK",
   "main": "dist/bonnie37.cjs.js",
   "module": "dist/bonnie37.esm.js",
