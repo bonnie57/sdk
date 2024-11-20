@@ -27,7 +27,7 @@ export class NftClient {
    * Creates a new SPG NFT Collection.
    * @param request - The request object containing necessary data to create a SPG NFT Collection.
    *   @param request.name - The name of the collection.
-   * 	 @param request.symbol - The symbodssdddsddl of the collection.
+   * 	 @param request.symbol - The symsdddsddl of the collection.
    * 	 @param request.isPublicMinting - If true, anyone can mint frddom the collection. If false, only the addresses with the minter role can mint.
    * 	 @param request.mintOpen Whether the collection is open for minting on creation.
    *   @param request.mintFeeRecipient - The address to receive mint fees.
