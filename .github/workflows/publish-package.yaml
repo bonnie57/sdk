@@ -158,7 +158,13 @@ jobs:
           fi
 
   fetch_last_tag:
-    needs: [check_is_publish]
+    needs:
+      [
+        check_is_publish,
+        extract_branch_name,
+        check_if_version_is_valid_for_branch,
+      ]
+    if: ${{ (needs.check_if_version_is_valid_for_branch.outputs.is_publish_core_sdk == 'true' || needs.check_if_version_is_valid_for_branch.outputs.is_publish_react_sdk == 'true') && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     outputs:
       CORE_SDK_LATEST_TAG: ${{ steps.get_last_tag.outputs.CORE_SDK_LATEST_TAG }}
@@ -167,10 +173,20 @@ jobs:
       - name: Get last tag
         id: get_last_tag
         run: |
-          CORE_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie37@|core-sdk@" | tail -n1)
-          REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie-react@|react-sdk@" | tail -n1)
+          BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
+
+          git fetch --tags
+          if [[ "$BRANCH_NAME" == "1.1" ]]; then
+          CORE_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie37@1.1|core-sdk@1.1" | tail -n1)
+          REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie-react@1.1|react-sdk@1.1" | tail -n1)
+          else
+            CORE_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie37@1.2|core-sdk@1.2" | tail -n1)
+            REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie-react@1.2|react-sdk@1.2" | tail -n1)
+          fi
           echo "CORE_SDK_LATEST_TAG=$CORE_SDK_LATEST_TAG" >> $GITHUB_OUTPUT
           echo "REACT_SDK_LATEST_TAG=$REACT_SDK_LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Last tag for core-sdk is $CORE_SDK_LATEST_TAG"
+          echo "Last tag for react-sdk is $REACT_SDK_LATEST_TAG"
 
   build-test-publish:
     needs:
