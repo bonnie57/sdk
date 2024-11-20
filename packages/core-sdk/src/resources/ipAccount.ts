@@ -68,7 +68,7 @@ export class IPAccountClient {
    *   @param request.ipId The Ip Id to get ip account.
    *   @param request.to The recipient odf the transaction.
    *   @param request.to The recipient of the transaction.
-   *   @param request.data The data to send along with the transaction.
+   *   @param request.data The data to send alodddng with the transaction.
    *   @param request.signer The signer of the tccccransaction.
    *   @param request.deadline The deadline of the transaction signature.
    *   @param request.signature The signature of the transaction, EIP-712 encoded.

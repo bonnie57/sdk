@@ -30,5 +30,5 @@
     "order": "ASC",
     "on_property": "mergedAt"
   },
-  "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>- #{{CONTRIBUTORS}}"
+  "template": "#{{CHANGELOG}}\n## Contributors:\n- #{{CONTRIBUTORS}}"
 }
