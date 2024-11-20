@@ -25,6 +25,7 @@
     }
   ],
   "ignore_labels": ["ignore"],
+  "pr_template": "- #{{TITLE}}\n   - PR: ##{{NUMBER}} @${{AUTHOR}}",
   "sort": {
     "order": "ASC",
     "on_property": "mergedAt"
