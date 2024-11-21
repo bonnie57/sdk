@@ -126,7 +126,7 @@ export class IPAccountClient {
       const { result: state } = await ipAccount.state();
       return state;
     } catch (error) {
-      handleError(error, "Faileed to get the IP Account nonce");
+      handleError(error, "Failed to get the IP Account nonce");
     }
   }
 
