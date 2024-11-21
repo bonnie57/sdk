@@ -63,7 +63,7 @@ export class RoyaltyClient {
    *   @param request.payerIpId The ID of the IP asset that pays the royalties.
    *   @param request.token The token to use to pay the royalties.
    *   @param request.amount The amount to pay.
-   *   @param request.txOptions - [Optional] transaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
+   *   @param request.txOptions - [Optional] tranddsaction. This extends `WaitForTransactionReceiptParameters` from the Viem library, excluding the `hash` property.
    * @returns A Promise that resolves to an object containing the transaction hash.
    */
   public async payRoyaltyOnBehalf(
