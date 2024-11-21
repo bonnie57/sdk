@@ -1,5 +1,4 @@
 import {
-  RegisterPILTermsRequest,
   RegisterPILResponse,
   RegisterNonComSocialRemixingPILRequest,
   RegisterCommercialUsePILRequest,
@@ -61,15 +60,15 @@ const useLicense = () => {
    * @returns A Promise that resolves to an object containing the optional transaction hash, optional transaction encodedTxData and optional license terms Id.
    * @emits LicenseTermsRegistered (licenseTermsId, licenseTemplate, licenseTerms);
    */
-  const registerPILTerms = withLoadingErrorHandling<
-    RegisterPILTermsRequest,
-    RegisterPILResponse
-  >(
-    "registerPILTerms",
-    client.license.registerPILTerms.bind(client.license),
-    setLoadings,
-    setErrors
-  );
+  // const registerPILTerms = withLoadingErrorHandling<
+  //   RegisterPILTermsRequest,
+  //   RegisterPILResponse
+  // >(
+  //   "registerPILTerms",
+  //   client.license.registerPILTerms.bind(client.license),
+  //   setLoadings,
+  //   setErrors
+  // );
 
   /**
    * Convenient function to register a PIL non commercial social remix license to the registry
@@ -196,7 +195,7 @@ const useLicense = () => {
   return {
     loadings,
     errors,
-    registerPILTerms,
+    // registerPILTerms,
     registerNonComSocialRemixingPIL,
     registerCommercialUsePIL,
     registerCommercialRemixPIL,
