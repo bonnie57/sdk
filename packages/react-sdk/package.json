@@ -1,6 +1,6 @@
 {
   "name": "bonnie-react",
-  "version": "1.2.0-rc.2",
+  "version": "1.2.0-rc.3",
   "main": "dist/bonnie-react.cjs.js",
   "module": "dist/bonnie-react.esm.js",
   "exports": {
