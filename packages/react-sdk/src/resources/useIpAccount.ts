@@ -4,6 +4,7 @@ import {
   IPAccountExecuteWithSigRequest,
   IPAccountExecuteWithSigResponse,
   IpAccountStateResponse,
+  TokenResponse,
 } from "@story-protocol/core-sdk";
 import { Address } from "viem";
 import { useState } from "react";
@@ -86,12 +87,12 @@ const useIpAccount = () => {
    * Returns the identifier of the non-fungible token which owns the account
    * @returns A Promise that resolves to an object containing the chain ID, token contract address, and token ID.
    */
-  // const getToken = withLoadingErrorHandling<Address, TokenResponse>(
-  //   "getToken",
-  //   client.ipAccount.getToken.bind(client.ipAccount),
-  //   setLoadings,
-  //   setErrors
-  // );
+  const getToken = withLoadingErrorHandling<Address, TokenResponse>(
+    "getToken",
+    client.ipAccount.getToken.bind(client.ipAccount),
+    setLoadings,
+    setErrors
+  );
 
   return {
     loadings,
@@ -99,7 +100,7 @@ const useIpAccount = () => {
     execute,
     executeWithSig,
     getIpAccountNonce,
-    // getToken,
+    getToken,
   };
 };
 export default useIpAccount;
