@@ -85,10 +85,10 @@ jobs:
           BRANCH_NAME="${{ needs.extract_branch_name.outputs.branch_name }}"
           if [[ "$BRANCH_NAME" == "v${{ env.VERSION_1_1 }}" || "$BRANCH_NAME" == "dev_v${{ env.VERSION_1_1 }}" ]]; then
             get_latest_version "${{ env.VERSION_1_1 }}" "@bonnie37/core-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "${{ env.VERSION_1_1 }}" "bonnie-react" "REACT_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_1 }}" "@bonnie37/react-sdk" "REACT_SDK_LATEST_VERSION"
           elif [[ "$BRANCH_NAME" == "${{ env.MAIN }}" || "$BRANCH_NAME" == ${{ env.DEV }} ]]; then        
             get_latest_version "${{ env.VERSION_1_2 }}" "@bonnie37/core-sdk" "CORE_SDK_LATEST_VERSION"
-            get_latest_version "${{ env.VERSION_1_2 }}" "bonnie-react" "REACT_SDK_LATEST_VERSION"
+            get_latest_version "${{ env.VERSION_1_2 }}" "@bonnie37/react-sdk" "REACT_SDK_LATEST_VERSION"
           fi
   # Fail if the version including react-sdk and core-sdk does not match the branch strategy
   check_if_version_is_valid_for_branch:
@@ -181,10 +181,10 @@ jobs:
           git fetch --tags
           if [[ "$BRANCH_NAME" == "v${{ env.VERSION_1_1 }}"  ]]; then
           CORE_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "@bonnie37/core-sdk@1.1|core-sdk@1.1" | tail -n1)
-          REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie-react@1.1|react-sdk@1.1" | tail -n1)
+          REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "@bonnie37/react-sdk@1.1|react-sdk@1.1" | tail -n1)
           else
             CORE_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "@bonnie37/core-sdk@1.2|core-sdk@1.2" | tail -n1)
-            REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "bonnie-react@1.2|react-sdk@1.2" | tail -n1)
+            REACT_SDK_LATEST_TAG=$(git tag --sort=creatordate | grep -E "@bonnie37/react-sdk@1.2|react-sdk@1.2" | tail -n1)
           fi
           echo "CORE_SDK_LATEST_TAG=$CORE_SDK_LATEST_TAG" >> $GITHUB_OUTPUT
           echo "REACT_SDK_LATEST_TAG=$REACT_SDK_LATEST_TAG" >> $GITHUB_OUTPUT
@@ -295,7 +295,7 @@ jobs:
     if: ${{  github.event_name == 'push' && needs.check_if_version_is_valid_for_branch.outputs.IS_PUBLISH_REACT_SDK == 'true'}}
     uses: ./.github/workflows/reusable-create-release.yml
     with:
-      tag_name: bonnie-react@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
+      tag_name: \@bonnie37/react-sdk@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
       is_core_sdk: false
       last_tag: ${{ needs.fetch_last_tag.outputs.REACT_SDK_LATEST_TAG }}
 
