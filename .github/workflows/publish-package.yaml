@@ -266,7 +266,7 @@ jobs:
     if: ${{ github.event_name == 'push' && needs.check_if_version_is_valid_for_branch.outputs.IS_PUBLISH_CORE_SDK == 'true'}}
     uses: ./.github/workflows/reusable-create-release.yml
     with:
-      tag_name: \@bonnie37/core-sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}
+      tag_name: "@bonnie37/core-sdk@${{ needs.print_version_to_publish.outputs.core_sdk_version_to_be_published }}"
       is_core_sdk: true
       last_tag: ${{ needs.fetch_last_tag.outputs.CORE_SDK_LATEST_TAG }}
 
@@ -295,7 +295,7 @@ jobs:
     if: ${{  github.event_name == 'push' && needs.check_if_version_is_valid_for_branch.outputs.IS_PUBLISH_REACT_SDK == 'true'}}
     uses: ./.github/workflows/reusable-create-release.yml
     with:
-      tag_name: \@bonnie37/react-sdk@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}
+      tag_name: "@bonnie37/react-sdk@${{ needs.print_version_to_publish.outputs.react_sdk_version_to_be_published }}"
       is_core_sdk: false
       last_tag: ${{ needs.fetch_last_tag.outputs.REACT_SDK_LATEST_TAG }}
 
