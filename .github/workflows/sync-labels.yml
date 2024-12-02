@@ -16,7 +16,6 @@ jobs:
         run: |
           ISSUE_NUMBERS=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#")
           echo "issue_numbers=(${ISSUE_NUMBERS})" >> $GITHUB_ENV
-          echo "Issue numbers are (${ISSUE_NUMBERS})"
 
       - name: Get labels from issue
         id: get_issue_labels
