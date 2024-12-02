@@ -23,7 +23,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const issueNumbers = ${{env.issue_numbers}}.split(' ');
+            const issueNumbers = ${{env.issue_numbers}}.split(',');
             echo `Issue numbers are ${issueNumbers}`;
             if (issueNumbers.length === 0) {
               core.setFailed("No issue numbers found in PR description.");
