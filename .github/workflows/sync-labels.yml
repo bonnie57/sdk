@@ -23,12 +23,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const issueNumbers = ${{env.issue_numbers}}.split(',');
-            echo `Issue numbers are ${issueNumbers}`;
+            console.log(process.env.ISSUE_NUMBERS);
+            const issueNumbers = process.env.ISSUE_NUMBERS.split(',');
+            console.log(`Issue numbers are ${issueNumbers}`);
             if (issueNumbers.length === 0) {
               core.setFailed("No issue numbers found in PR description.");
               return;
-            }
+            },
             let allLabels = new Set();
             for (const issueNumber of issueNumbers) {
               const { data: issue } = await github.rest.issues.get({
@@ -42,7 +43,6 @@ jobs:
             const uniqueLabels = Array.from(allLabels);
             core.setOutput("labels", uniqueLabels.join(","));
             console.log(`Labels are ${uniqueLabels.join(",")}`);
-            echo `labels=${uniqueLabels.join(",")}` >> $GITHUB_ENV
 
       - name: Apply labels to PR
         if: steps.get_issue_labels.outputs.result != ''
