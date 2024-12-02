@@ -14,30 +14,35 @@ jobs:
       - name: Get associated issue number
         id: get-issue-number
         run: |
-          ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#")
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
-          echo "Issue number is $ISSUE_NUMBER"
+          ISSUE_NUMBERS=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#")
+          echo "issue_numbers=(${ISSUE_NUMBERS})" >> $GITHUB_ENV
+          echo "Issue numbers are (${ISSUE_NUMBERS})"
 
       - name: Get labels from issue
         id: get_issue_labels
         uses: actions/github-script@v6
         with:
           script: |
-            const issueNumber = ${{ env.issue_number }}
-            echo `Issue number is ${issueNumber}`
-            if (!issueNumber) {
-              core.setFailed("No issue number found in PR description.");
+            const issueNumbers = process.env.issue_numbers.split(' ');
+            console.log(`Issue numbers are ${issueNumbers}`);
+            if (issueNumbers.length === 0) {
+              core.setFailed("No issue numbers found in PR description.");
               return;
             }
-            const { data: issue } = await github.rest.issues.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-            });
-            const labels = issue.labels.map(label => label.name);
-            core.setOutput("labels", labels.join(","));
-            echo "labels=${labels.join(",")}" >> $GITHUB_ENV
-            echo `Labels are ${labels.join(",")}`;
+            let allLabels = new Set();
+            for (const issueNumber of issueNumbers) {
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+              });
+              const labels = issue.labels.map(label => label.name);
+              labels.forEach(label => allLabels.add(label));
+            }
+            const uniqueLabels = Array.from(allLabels);
+            core.setOutput("labels", uniqueLabels.join(","));
+            console.log(`Labels are ${uniqueLabels.join(",")}`);
+            echo `labels=${uniqueLabels.join(",")}` >> $GITHUB_ENV
 
       - name: Apply labels to PR
         if: steps.get_issue_labels.outputs.result != ''
