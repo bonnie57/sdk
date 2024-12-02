@@ -1,0 +1,54 @@
+name: Sync Labels from Linear Issue to PR
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get associated issue number
+        id: get-issue-number
+        run: |
+          ISSUE_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#")
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_ENV
+          echo "Issue number is $ISSUE_NUMBER"
+
+      - name: Get labels from issue
+        id: get_issue_labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = ${{ env.issue_number }}
+            echo `Issue number is ${issueNumber}`
+            if (!issueNumber) {
+              core.setFailed("No issue number found in PR description.");
+              return;
+            }
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            });
+            const labels = issue.labels.map(label => label.name);
+            core.setOutput("labels", labels.join(","));
+            echo "labels=${labels.join(",")}" >> $GITHUB_ENV
+            echo `Labels are ${labels.join(",")}`;
+
+      - name: Apply labels to PR
+        if: steps.get_issue_labels.outputs.result != ''
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const labels = ${{env.labels}}.split(",");
+            echo `Applying labels: ${label.split(",")}`;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labels,
+            });
