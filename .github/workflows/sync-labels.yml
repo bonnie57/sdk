@@ -24,8 +24,16 @@ jobs:
         with:
           script: |
             console.log("111111");
-            console.log(process.env.issue_numbers);
-            
+            console.log(process.env.issue_numbers.split(","));
+            for (const issueNumber of issueNumbers) {
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+              });
+              const labels = issue.labels.map(label => label.name);
+              labels.forEach(label => allLabels.add(label));
+            }
         env:
           ISSUE_NUMBERS: ${{ env.issue_numbers }}
 
