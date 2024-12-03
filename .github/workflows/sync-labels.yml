@@ -16,7 +16,7 @@ jobs:
         run: |
           ISSUE_NUMBERS=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#" | tr '\n' ',')
           ISSUE_NUMBERS=$(echo $ISSUE_NUMBERS | sed 's/,$//')
-          echo "issue_numbers=$ISSUE_NUMBERS" >> $GITHUB_ENV
+          echo "ISSUE_NUMBERS=$ISSUE_NUMBERS" >> $GITHUB_ENV
           echo "Issue numbers are $ISSUE_NUMBERS"
 
       - name: Get labels from issue
@@ -36,6 +36,8 @@ jobs:
               console.log(`Error: ${error}`);
               return '';
             }
+        env:
+          ISSUE_NUMBERS: ${{ env.ISSUE_NUMBERS }}
 
       - name: Apply labels to PR
         if: steps.get_issue_labels.outputs.result != ''
