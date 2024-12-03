@@ -26,19 +26,15 @@ jobs:
           script: |
             const issueNumbers = process.env.ISSUE_NUMBERS.split(",");  
             try {
-              const labels = await github.rest.issues.listLabelsOnIssue({
+              const labels = await github.rest.issues.get({
+                issue_number: issueNumbers[0],
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: issueNumbers[0],
               });
-              console.log(`Labels: ${labels.data.map(label => label.name).join(",")}`);
-              return labels.data.map(label => label.name).join(",");
             } catch (error) {
               console.log(`Error: ${error}`);
               return '';
             }
-        env:
-          ISSUE_NUMBERS: ${{ env.issue_numbers }}
 
       - name: Apply labels to PR
         if: steps.get_issue_labels.outputs.result != ''
