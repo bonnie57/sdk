@@ -24,26 +24,10 @@ jobs:
         with:
           script: |
             console.log("111111");
-            console.log(process.env.ISSUE_NUMBERS);
-            const issueNumbers = process.env.ISSUE_NUMBERS.split(',');
-            console.log(`Issue numbers are ${issueNumbers}`);
-            if (issueNumbers.length === 0) {
-              core.setFailed("No issue numbers found in PR description.");
-              return;
-            },
-            let allLabels = new Set();
-            for (const issueNumber of issueNumbers) {
-              const { data: issue } = await github.rest.issues.get({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-              });
-              const labels = issue.labels.map(label => label.name);
-              labels.forEach(label => allLabels.add(label));
-            }
-            const uniqueLabels = Array.from(allLabels);
-            core.setOutput("labels", uniqueLabels.join(","));
-            console.log(`Labels are ${uniqueLabels.join(",")}`);
+            console.log(process.env.issue_numbers);
+            
+        env:
+          ISSUE_NUMBERS: ${{ env.issue_numbers }}
 
       - name: Apply labels to PR
         if: steps.get_issue_labels.outputs.result != ''
