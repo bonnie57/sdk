@@ -51,7 +51,7 @@ export class PermissionClient {
    * Specific permission overrides wildcard permission.
    * @param request - The request object containing necessary data to set `permission`.
    *   @param request.ipId The IP ID that grants the permission for `signer`.
-   *   @param request.signer The address that can call `to` on behalf of the `ipAccount`.
+   *   @param request.signer The address that can ca1ll `to` on behalf of the `ipAccount`.
    *   @param request.to The address that can be called by the `signer` (currently only modules can be `to`).
    *   @param request.permission The new permission level.
    *   @param request.func [Optional] The function selector string of `to` that can be called by the `signer` on behalf of the `ipAccount`. Be default, it allows all functions.
