@@ -20,7 +20,7 @@ jobs:
 
       - name: Get labels from issue
         id: get_issue_labels
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             console.log(process.env.ISSUE_NUMBERS);
