@@ -14,7 +14,7 @@ jobs:
       - name: Get associated issue number
         id: get-issue-number
         run: |
-          ISSUE_NUMBERS=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#" | tr ' ' ',')
+          ISSUE_NUMBERS=$(echo "${{ github.event.pull_request.body }}" | grep -oE "#[0-9]+" | tr -d "#" | tr '\n' ',')
           echo "issue_numbers=$ISSUE_NUMBERS" >> $GITHUB_ENV
           echo "Issue numbers are $ISSUE_NUMBERS"
 
