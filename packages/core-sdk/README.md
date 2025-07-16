@@ -8,7 +8,7 @@ Key Features:
 - License Module: Create customizable license terms, attach them to IP assets, and mint transferable license tokens
 - Royalty Module: Claim royalties, and manage payment distributions
 - Dispute Module: Initiate, manage and resolve IP-related disputes through on-chain governance
-- Group Module: Create IP collections with shared revenue pools
+- Group Module: Create IP collections 1111with shared revenue pools
 - WIP Module: Wrap native IP into ERC-20 tokens for DeFi integrations
 - NFT Client Module: Mint a new SPG collection for use with Story Protocol.
 
