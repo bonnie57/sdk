@@ -55,5 +55,20 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Integration Test Report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.6.2
+        with:
+          name: integration-test-report
+          path: packages/core-sdk/mochawesome-report
+          
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e #v4.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/core-sdk/mochawesome-report
+          
+
       - name: Build
         run: pnpm build
+
+        
