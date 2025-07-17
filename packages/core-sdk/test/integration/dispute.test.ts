@@ -70,7 +70,7 @@ describe("Dispute Functions", () => {
     ).ipId!;
   });
 
-  describe.only("raiseDispute and counter dispute", () => {
+  describe("raiseDispute and counter dispute", () => {
     let disputeId: bigint;
     it("should raise a dispute", async () => {
       const raiseDisputeRequest: RaiseDisputeRequest = {
@@ -160,7 +160,7 @@ describe("Dispute Functions", () => {
     });
   });
 
-  it("it should not cancel a dispute (yet)", async () => {
+  it.only("it should not cancel a dispute (yet)", async () => {
     const raiseResponse = await clientA.dispute.raiseDispute({
       targetIpId: ipIdB,
       cid: await generateCID(),
