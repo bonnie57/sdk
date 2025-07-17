@@ -71,7 +71,6 @@ describe("Dispute Functions", () => {
   });
 
   describe.only("raiseDispute and counter dispute", () => {
-    let disputeId: bigint;
     it("should raise a dispute", async () => {
       const raiseDisputeRequest: RaiseDisputeRequest = {
         targetIpId: ipIdB,
@@ -84,7 +83,6 @@ describe("Dispute Functions", () => {
 
       expect(response.txHash).to.be.a("string");
       expect(response.disputeId).to.be.a("bigint");
-      disputeId = response.disputeId!;
     });
 
     // it("should validate all enum values defined in DisputeTargetTag", async () => {
