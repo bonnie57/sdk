@@ -62,7 +62,12 @@ jobs:
           path: packages/core-sdk/mochawesome-report
 
       - name: Change to mochawesome directory
-        run: ls -la
+        run: |
+          cd /home/runner/work/sdk/sdk
+          ls -la
+          echo "--------------------------------"
+          cd /home/runner/work/sdk
+          ls -la
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4 #v4.1.0
