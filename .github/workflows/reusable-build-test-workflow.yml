@@ -65,7 +65,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4 #v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/core-sdk/mochawesome-report/*
+          publish_dir: packages/core-sdk/mochawesome-report/.*
 
       - name: Build
         run: pnpm build
