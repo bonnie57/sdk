@@ -61,14 +61,11 @@ jobs:
           name: integration-test-report
           path: packages/core-sdk/mochawesome-report
 
-      - name: Change to mochawesome directory
-        run: cd packages/core-sdk/mochawesome-report
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4 #v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          destination_dir: packages/core-sdk/mochawesome-report
+          publish_dir: packages/core-sdk/mochawesome-report
 
       - name: Build
         run: pnpm build
