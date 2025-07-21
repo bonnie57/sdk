@@ -66,7 +66,7 @@ jobs:
       - name: Rename Report
         run: |
           mv packages/core-sdk/mochawesome-report packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
-          mv packages/core-sdk/mochawesome.html packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome-${{ env.TIMESTAMP }}.html
+          mv packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome.html packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome-${{ env.TIMESTAMP }}.html
           echo "Renamed report to mochawesome-report-${{ env.TIMESTAMP }}"
 
           ls -la packages/core-sdk/
