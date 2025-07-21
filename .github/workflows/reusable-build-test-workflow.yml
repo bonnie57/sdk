@@ -55,19 +55,14 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Build
+        run: pnpm build
+
       - name: Integration Test Report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.6.2
         with:
           name: integration-test-report
           path: packages/core-sdk/mochawesome-report
-
-      - name: Change to mochawesome directory
-        run: |
-          cd /home/runner/work/sdk/sdk
-          ls -la
-          echo "--------------------------------"
-          cd /home/runner/work/sdk/sdk/packages/core-sdk/mochawesome-report
-          ls -la
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4 #v4.1.0
@@ -76,6 +71,3 @@ jobs:
           publish_dir: packages/core-sdk/mochawesome-report
           publish_branch: gh-pages
           keep_files: true
-
-      - name: Build
-        run: pnpm build
