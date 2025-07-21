@@ -66,7 +66,9 @@ jobs:
       - name: Rename Report
         run: |
           mv packages/core-sdk/mochawesome-report packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
+          mv packages/core-sdk/mochawesome.html packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome-${{ env.TIMESTAMP }}.html
           echo "Renamed report to mochawesome-report-${{ env.TIMESTAMP }}"
+
           ls -la packages/core-sdk/
           ls -la packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
 
@@ -86,5 +88,5 @@ jobs:
       - name: Add Github Page Link to Summary
         run: |
           repo_name=$(echo "${{ github.repository }}" | cut -d'/' -f2)
-          github_pages_url="https://${{ github.repository_owner }}.github.io/${repo_name}/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome.html"
+          github_pages_url="https://${{ github.repository_owner }}.github.io/${repo_name}/mochawesome-${{ env.TIMESTAMP }}.html"
           echo "## 📊Github Page Link: [View Test Report](${github_pages_url})" >> $GITHUB_STEP_SUMMARY
