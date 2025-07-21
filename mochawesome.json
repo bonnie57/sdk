@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2025-07-21T06:58:47.789Z",
-    "end": "2025-07-21T06:59:06.173Z",
-    "duration": 18384,
+    "start": "2025-07-21T07:07:19.559Z",
+    "end": "2025-07-21T07:07:42.155Z",
+    "duration": 22596,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "3f7f9c94-e016-4ada-8557-39ecf1478ded",
+      "uuid": "f89b1acc-7e0d-4007-8470-405992e06287",
       "title": "",
       "fullFile": "/home/runner/work/sdk/sdk/packages/core-sdk/test/integration/dispute.test.ts",
       "file": "/test/integration/dispute.test.ts",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "14b79495-7fcc-42f9-868e-2782750dcf52",
+          "uuid": "486e5b8b-cbf2-486f-a00b-136cfac18b24",
           "title": "Dispute Functions",
           "fullFile": "/home/runner/work/sdk/sdk/packages/core-sdk/test/integration/dispute.test.ts",
           "file": "/test/integration/dispute.test.ts",
@@ -36,7 +36,7 @@
               "title": "\"before all\" hook in \"Dispute Functions\"",
               "fullTitle": "Dispute Functions \"before all\" hook in \"Dispute Functions\"",
               "timedOut": false,
-              "duration": 9209,
+              "duration": 9357,
               "state": null,
               "speed": null,
               "pass": false,
@@ -45,8 +45,8 @@
               "context": null,
               "code": "clientA = (0, util_1.getStoryClient)();\nconst derivedClient = await (0, BIP32_1.getDerivedStoryClient)();\nclientB = derivedClient.clientB;\nminimumBond = await (0, oov3_1.getMinimumBond)(util_1.publicClient, new generated_1.ArbitrationPolicyUmaClient(util_1.publicClient, util_1.walletClient), src_1.WIP_TOKEN_ADDRESS);\nconst txData = await clientA.nftClient.createNFTCollection({\n    name: \"test-collection\",\n    symbol: \"TEST\",\n    maxSupply: 100,\n    isPublicMinting: true,\n    mintOpen: true,\n    contractURI: \"test-uri\",\n    mintFeeRecipient: util_1.TEST_WALLET_ADDRESS,\n});\nconst nftContract = txData.spgNftContract;\nipIdB = (await clientB.ipAsset.mintAndRegisterIp({\n    spgNftContract: nftContract,\n})).ipId;",
               "err": {},
-              "uuid": "1fb1689e-8779-4caf-8d56-a62aae9879ee",
-              "parentUUID": "14b79495-7fcc-42f9-868e-2782750dcf52",
+              "uuid": "cd70e9a2-e725-4d81-aaec-9521830a4d97",
+              "parentUUID": "486e5b8b-cbf2-486f-a00b-136cfac18b24",
               "isHook": true,
               "skipped": false
             }
@@ -55,7 +55,7 @@
           "tests": [],
           "suites": [
             {
-              "uuid": "210f4dd8-b80c-4b67-8778-b14fca4675cf",
+              "uuid": "e58f5de6-6f6e-4c38-972c-1204d81770c1",
               "title": "raiseDispute and counter dispute",
               "fullFile": "/home/runner/work/sdk/sdk/packages/core-sdk/test/integration/dispute.test.ts",
               "file": "/test/integration/dispute.test.ts",
@@ -66,7 +66,7 @@
                   "title": "should raise a dispute",
                   "fullTitle": "Dispute Functions raiseDispute and counter dispute should raise a dispute",
                   "timedOut": false,
-                  "duration": 9173,
+                  "duration": 13235,
                   "state": "passed",
                   "speed": "slow",
                   "pass": true,
@@ -75,20 +75,20 @@
                   "context": null,
                   "code": "const raiseDisputeRequest = {\n    targetIpId: ipIdB,\n    cid: await generateCID(),\n    targetTag: src_1.DisputeTargetTag.IMPROPER_REGISTRATION,\n    liveness: 2592000,\n    bond: minimumBond,\n};\nconst response = await clientA.dispute.raiseDispute(raiseDisputeRequest);\n(0, chai_1.expect)(response.txHash).to.be.a(\"string\");\n(0, chai_1.expect)(response.disputeId).to.be.a(\"bigint\");",
                   "err": {},
-                  "uuid": "82c8ae02-e655-450e-8346-5db290de1fb6",
-                  "parentUUID": "210f4dd8-b80c-4b67-8778-b14fca4675cf",
+                  "uuid": "be1cdc07-3295-49fa-b3c2-c48c23443eb7",
+                  "parentUUID": "e58f5de6-6f6e-4c38-972c-1204d81770c1",
                   "isHook": false,
                   "skipped": false
                 }
               ],
               "suites": [],
               "passes": [
-                "82c8ae02-e655-450e-8346-5db290de1fb6"
+                "be1cdc07-3295-49fa-b3c2-c48c23443eb7"
               ],
               "failures": [],
               "pending": [],
               "skipped": [],
-              "duration": 9173,
+              "duration": 13235,
               "root": false,
               "rootEmpty": false,
               "_timeout": 300000
