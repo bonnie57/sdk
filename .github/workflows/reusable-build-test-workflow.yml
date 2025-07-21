@@ -9,6 +9,9 @@ on:
       ENVIRONMENT:
         required: true
         type: string
+      TIMESTAMP:
+        required: true
+        type: string
     secrets:
       WALLET_PRIVATE_KEY:
         required: true
@@ -60,23 +63,24 @@ jobs:
 
       - name: Rename Report
         run: |
-          mv packages/core-sdk/mochawesome-report packages/core-sdk/mochawesome-report-${{ steps.timestamp.outputs.timestamp }}
+          mv packages/core-sdk/mochawesome-report packages/core-sdk/mochawesome-report-${{ inputs.TIMESTAMP }}
+          echo "Renamed report to mochawesome-report-${{ inputs.TIMESTAMP }}"
 
       - name: Integration Test Report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.6.2
         with:
-          name: integration-test-report-${{ steps.timestamp.outputs.timestamp }}
-          path: packages/core-sdk/mochawesome-report-${{ steps.timestamp.outputs.timestamp }}
+          name: integration-test-report-${{ inputs.TIMESTAMP }}
+          path: packages/core-sdk/mochawesome-report-${{ inputs.TIMESTAMP }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4 #v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/core-sdk/mochawesome-report-${{ steps.timestamp.outputs.timestamp }}
+          publish_dir: packages/core-sdk/mochawesome-report-${{ inputs.TIMESTAMP }}
           keep_files: true
 
       - name: Add Github Page Link to Summary
         run: |
           repo_name=$(echo "${{ github.repository }}" | cut -d'/' -f2)
-          github_pages_url="https://${{ github.repository_owner }}.github.io/${repo_name}/mochawesome-report-${{ steps.timestamp.outputs.timestamp }}/mochawesome-report.html"
+          github_pages_url="https://${{ github.repository_owner }}.github.io/${repo_name}/mochawesome-report-${{ inputs.TIMESTAMP }}/mochawesome-report.html"
           echo "## 📊Github Page Link: ** [View Test Report](${github_pages_url})" >> $GITHUB_STEP_SUMMARY
