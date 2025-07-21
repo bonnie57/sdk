@@ -41,7 +41,7 @@ jobs:
           ref: ${{ inputs.sha }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4
         with:
           version: 8
 
@@ -67,10 +67,6 @@ jobs:
         run: |
           mv -f packages/core-sdk/mochawesome-report packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
           mv -f packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome.html packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}/mochawesome-${{ env.TIMESTAMP }}.html
-          echo "Renamed report to mochawesome-report-${{ env.TIMESTAMP }}"
-
-          ls -la packages/core-sdk/
-          ls -la packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
 
       - name: Integration Test Report
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.6.2
@@ -79,7 +75,7 @@ jobs:
           path: packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4 #v4.1.0
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e #v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: packages/core-sdk/mochawesome-report-${{ env.TIMESTAMP }}
