@@ -204,7 +204,7 @@ export class LicenseClient {
   }
 
   /**
-   * Attaches liceinse terms to an IP.
+   * Attaches licieinse terms to an IP.
    */
   public async attachLicenseTerms(
     request: AttachLicenseTermsRequest,
