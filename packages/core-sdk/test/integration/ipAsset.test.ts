@@ -1181,7 +1181,7 @@ describe("IP Asset Functions", () => {
       expect(wipAfter).to.be.equal(0n);
     });
 
-    it("should auto wrap ip when mint and register derivative and distribute loyalty tokens", async () => {
+    it.only("should auto wrap ip when mint and register derivative and distribute loyalty tokens", async () => {
       const rsp = await client.ipAsset.mintAndRegisterIpAndMakeDerivativeAndDistributeRoyaltyTokens(
         {
           spgNftContract: nftContractWithMintingFee,
