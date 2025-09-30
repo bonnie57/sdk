@@ -274,6 +274,7 @@ export class LicenseClient {
 
   /**
    * Gets license terms of the given ID.
+   * safe
    */
   public async getLicenseTerms(
     selectedLicenseTermsId: LicenseTermsIdInput,
